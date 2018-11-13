@@ -15,4 +15,7 @@
     <string name="channel_the_sport_bible">The Sport Bible</string>
     <string name="powered_by">News API</string>
     <string name="news_source">Sports News Source</string>
+    <string name="label_dash">-</string>
+    <string name="sample_subtitle">BBC News</string>
+    <string name="thumbnail_article_image">A thumbnail image provided with news article</string>
 </resources>
