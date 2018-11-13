@@ -1,4 +1,18 @@
 <resources>
     <string name="app_name">Udacity Capstone Project</string>
     <string name="action_settings">Settings</string>
+    <string name="channel_bbc_sports">BBC Sport</string>
+    <string name="channel_bleacher_report">Bleacher Report</string>
+    <string name="channel_espn">ESPN</string>
+    <string name="channel_espn_cric_info">ESPN Cric Info</string>
+    <string name="channel_football_italia">Football Italia</string>
+    <string name="channel_four_four_Two">FourFour Two</string>
+    <string name="channel_fox_sports">Fox Sports</string>
+    <string name="channel_le_quipe">Le\'quipe</string>
+    <string name="channel_marca">Marca</string>
+    <string name="channel_nhl_news">NHL News</string>
+    <string name="channel_nfl_news">NFL News</string>
+    <string name="channel_the_sport_bible">The Sport Bible</string>
+    <string name="powered_by">News API</string>
+    <string name="news_source">Sports News Source</string>
 </resources>
