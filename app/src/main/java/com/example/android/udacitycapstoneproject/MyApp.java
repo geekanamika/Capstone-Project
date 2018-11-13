@@ -3,7 +3,6 @@ package com.example.android.udacitycapstoneproject;
 import android.app.Application;
 import android.content.Context;
 
-import com.example.android.udacitycapstoneproject.data.AppNewsRepository;
 import com.example.android.udacitycapstoneproject.di.components.ApplicationComponent;
 import com.example.android.udacitycapstoneproject.di.components.DaggerApplicationComponent;
 import com.example.android.udacitycapstoneproject.di.modules.ApplicationModule;

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 
 import com.example.android.udacitycapstoneproject.di.qualifiers.ActivityContext;
+import com.example.android.udacitycapstoneproject.ui.main.MainActivity;
 
 import dagger.Module;
 import dagger.Provides;
@@ -13,9 +14,9 @@ import dagger.Provides;
  */
 @Module
 public class MainActivityModule {
-    private Activity mActivity;
+    private MainActivity mActivity;
 
-    public MainActivityModule(Activity activity) {
+    public MainActivityModule(MainActivity activity) {
         mActivity = activity;
     }
 

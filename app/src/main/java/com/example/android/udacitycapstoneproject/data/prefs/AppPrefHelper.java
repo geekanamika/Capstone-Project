@@ -9,13 +9,23 @@ import javax.inject.Singleton;
  * Created by Anamika Tripathi on 12/11/18.
  */
 @Singleton
-public class AppPrefHelper {
+public class AppPrefHelper implements IPrefHelper{
 
-    SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPreferences;
+    private final String DEFAULT_CHANNEL_KEY = "DEFAULT-CHANNEL-KEY";
 
     @Inject
     AppPrefHelper(SharedPreferences sharedPreferences) {
         this.sharedPreferences = sharedPreferences;
     }
 
+    @Override
+    public String getDefaultOrFavChannel() {
+        return sharedPreferences.getString(DEFAULT_CHANNEL_KEY, "bbc-sport");
+    }
+
+    @Override
+    public void setDefaultOrFavChannel(String channel) {
+        sharedPreferences.edit().putString(DEFAULT_CHANNEL_KEY, channel).apply();
+    }
 }

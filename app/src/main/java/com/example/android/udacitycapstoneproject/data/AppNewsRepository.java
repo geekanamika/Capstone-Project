@@ -68,4 +68,14 @@ public class AppNewsRepository implements INewsRepository {
     public LiveData<Boolean> isLoadingData() {
         return networkHelper.getIsLoading();
     }
+
+    @Override
+    public String getDefaultOrFavChannel() {
+        return prefHelper.getDefaultOrFavChannel();
+    }
+
+    @Override
+    public void setDefaultOrFavChannel(String channel) {
+        prefHelper.setDefaultOrFavChannel(channel);
+    }
 }
