@@ -45,4 +45,5 @@ ext {
     gsonVersion = '2.8.4'
     butterKnifeVersion = '8.8.1'
     retrofitGsonVersion = '2.1.0'
+    daggerVersion = '2.14.1'
 }
