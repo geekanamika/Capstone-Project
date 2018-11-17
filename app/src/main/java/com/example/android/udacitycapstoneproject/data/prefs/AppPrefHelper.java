@@ -1,5 +1,6 @@
 package com.example.android.udacitycapstoneproject.data.prefs;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 
 /**
@@ -7,9 +8,15 @@ import android.content.SharedPreferences;
  */
 public class AppPrefHelper implements IPrefHelper{
 
-    private SharedPreferences sharedPreferences;
+    private final SharedPreferences sharedPreferences;
     private final String DEFAULT_CHANNEL_KEY = "DEFAULT-CHANNEL-KEY";
     private final String CURRENT_CHANNEL_KEY = "CURRENT-CHANNEL-KEY";
+
+
+    public AppPrefHelper(Context context, String prefFileName) {
+        sharedPreferences = context.getSharedPreferences(prefFileName, Context.MODE_PRIVATE);
+    }
+
 
     AppPrefHelper(SharedPreferences sharedPreferences) {
         this.sharedPreferences = sharedPreferences;

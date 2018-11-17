@@ -17,12 +17,28 @@ public class AppNewsRepository implements INewsRepository {
     private AppDbHelper dbHelper;
     private AppPrefHelper prefHelper;
     private AppNetworkSource networkHelper;
+    // For Singleton instantiation
+    private static final Object LOCK = new Object();
+    private static AppNewsRepository sInstance;
 
-    AppNewsRepository(AppDbHelper dbHelper, AppPrefHelper helper, AppNetworkSource networkHelper) {
+    private AppNewsRepository(AppDbHelper dbHelper, AppPrefHelper helper, AppNetworkSource networkHelper) {
         this.dbHelper = dbHelper;
         this.prefHelper = helper;
         this.networkHelper = networkHelper;
     }
+
+
+    public synchronized static AppNewsRepository getInstance(
+            AppNetworkSource networkDataSource,
+            AppPrefHelper preferenceHelper, AppDbHelper dbHelper) {
+        if (sInstance == null) {
+            synchronized (LOCK) {
+                sInstance = new AppNewsRepository(dbHelper,preferenceHelper,networkDataSource);
+            }
+        }
+        return sInstance;
+    }
+
 
     // db methods
     @Override
