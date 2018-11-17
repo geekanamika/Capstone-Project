@@ -5,5 +5,7 @@ package com.example.android.udacitycapstoneproject.data.prefs;
  */
 public interface IPrefHelper {
     String getDefaultOrFavChannel();
+    String getCurrentChannel();
     void setDefaultOrFavChannel(String channel);
+    void setCurrentFavChannel(String channel);
 }

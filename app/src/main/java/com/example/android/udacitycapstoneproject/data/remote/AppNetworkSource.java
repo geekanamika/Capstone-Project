@@ -2,18 +2,12 @@ package com.example.android.udacitycapstoneproject.data.remote;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
-import android.graphics.Movie;
-import android.util.Log;
 
 import com.example.android.udacitycapstoneproject.BuildConfig;
 import com.example.android.udacitycapstoneproject.data.local.model.Article;
 import com.example.android.udacitycapstoneproject.data.local.model.NewsResponse;
 
 import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -22,7 +16,6 @@ import timber.log.Timber;
 /**
  * Created by Anamika Tripathi on 13/11/18.
  */
-@Singleton
 public class AppNetworkSource {
 
     private WebService webService;
@@ -32,7 +25,6 @@ public class AppNetworkSource {
     private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
 
-    @Inject
     AppNetworkSource(WebService webService) {
         this.webService = webService;
         mDownloadedNewsArticles = new MutableLiveData<>();

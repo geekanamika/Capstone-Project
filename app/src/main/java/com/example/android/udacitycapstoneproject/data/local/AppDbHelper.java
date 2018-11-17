@@ -7,19 +7,14 @@ import com.example.android.udacitycapstoneproject.utils.AppExecutors;
 
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 /**
  * Created by Anamika Tripathi on 13/11/18.
  */
-@Singleton
 public class AppDbHelper implements IDbHelper {
 
     private final AppDatabase mAppDatabase;
     private final AppExecutors executors;
 
-    @Inject
     AppDbHelper(AppDatabase appDatabase, AppExecutors executors) {
         this.mAppDatabase = appDatabase;
         this.executors = executors;

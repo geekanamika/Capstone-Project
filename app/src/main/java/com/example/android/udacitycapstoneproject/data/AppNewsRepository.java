@@ -9,20 +9,15 @@ import com.example.android.udacitycapstoneproject.data.remote.AppNetworkSource;
 
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 /**
  * Created by Anamika Tripathi on 12/11/18.
  */
-@Singleton
 public class AppNewsRepository implements INewsRepository {
 
     private AppDbHelper dbHelper;
     private AppPrefHelper prefHelper;
     private AppNetworkSource networkHelper;
 
-    @Inject
     AppNewsRepository(AppDbHelper dbHelper, AppPrefHelper helper, AppNetworkSource networkHelper) {
         this.dbHelper = dbHelper;
         this.prefHelper = helper;
@@ -75,7 +70,17 @@ public class AppNewsRepository implements INewsRepository {
     }
 
     @Override
+    public String getCurrentChannel() {
+        return prefHelper.getCurrentChannel();
+    }
+
+    @Override
     public void setDefaultOrFavChannel(String channel) {
         prefHelper.setDefaultOrFavChannel(channel);
+    }
+
+    @Override
+    public void setCurrentFavChannel(String channel) {
+        prefHelper.setCurrentFavChannel(channel);
     }
 }
