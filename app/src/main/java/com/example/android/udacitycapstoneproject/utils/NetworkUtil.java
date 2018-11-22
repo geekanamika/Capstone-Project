@@ -20,7 +20,7 @@ public class NetworkUtil {
     public static boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager =
                 (ConnectivityManager) MyApp.getInstance().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = Objects.requireNonNull(connectivityManager).getActiveNetworkInfo();
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         return networkInfo != null && networkInfo.isConnected();
     }
 }

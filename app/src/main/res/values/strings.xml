@@ -45,4 +45,14 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="tag_article_list_fragment">list fragment</string>
+    <string name="key_parcellable_article">key_parcellable_article</string>
+    <string name="detail_error_message">Something Unexpted Occured!</string>
+    <string name="detail_fragment">detail-fragment</string>
+    <string name="article_image">article image</string>
+    <string name="overview">Overview</string>
+    <string name="share">share button</string>
+    <string name="btn_text">Read Full Article</string>
+    <string name="favorite">favourite button</string>
+    <string name="by">By %s</string>
+    <string name="tag_detail_fragment">detail fragment</string>
 </resources>

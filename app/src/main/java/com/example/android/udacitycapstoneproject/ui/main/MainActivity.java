@@ -1,8 +1,11 @@
 package com.example.android.udacitycapstoneproject.ui.main;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
@@ -15,18 +18,26 @@ import android.view.MenuItem;
 
 import com.example.android.udacitycapstoneproject.R;
 import com.example.android.udacitycapstoneproject.data.local.model.Article;
+import com.example.android.udacitycapstoneproject.ui.detail.DetailActivity;
+import com.example.android.udacitycapstoneproject.ui.detail.article_detail.ArticleDetailFragment;
 import com.example.android.udacitycapstoneproject.ui.main.article_list.ArticleListFragment;
+import com.example.android.udacitycapstoneproject.utils.AppConstants;
 
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements ArticleListFragment.OnArticleListListener {
 
-    private DrawerLayout drawerLayout;
-    private NavigationView navigationView;
-    private ActionBarDrawerToggle drawerToggle;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawerLayout;
+    @BindView(R.id.nav_view)
+    NavigationView navigationView;
+    @BindView(R.id.main_activity_toolbar)
+    Toolbar toolbar;
     FragmentManager manager;
-    private Toolbar toolbar;
-   // private TextView subTitleToolbar;
     private boolean isTwoPane;
 
     MainActivityViewModel viewModel;
@@ -38,12 +49,14 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
 
         // set layout
         setContentView(R.layout.activity_main);
-        drawerLayout = findViewById(R.id.drawer_layout);
+
+        //drawerLayout = findViewById(R.id.drawer_layout);
+        //navigationView = findViewById(R.id.nav_view);
+        //Toolbar toolbar = findViewById(R.id.main_activity_toolbar);
+        ButterKnife.bind(this);
+        toolbar.setTitle(getString(R.string.app_name));
         isTwoPane = getResources().getBoolean(R.bool.isTablet);
         manager = getSupportFragmentManager();
-        navigationView = findViewById(R.id.nav_view);
-        toolbar = findViewById(R.id.main_activity_toolbar);
-        toolbar.setTitle(getString(R.string.app_name));
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -74,9 +87,15 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
         if (isTwoPane) {
             Timber.d("tablet screen");
             setNewListFragment();
-            //        manager.beginTransaction().add(R.id.news_article_detail_container,
-//                    DetailStepFragment.newInstance(recipeResponse.getSteps().get(0))).commit();
-
+            viewModel.startFetchingData(viewModel.getDefaultOrFavChannel());
+            viewModel.getNewsNetworkLiveData().observe(this, new Observer<List<Article>>() {
+                @Override
+                public void onChanged(@Nullable List<Article> articles) {
+                    manager.beginTransaction().add(R.id.news_article_detail_container,
+                            ArticleDetailFragment.newInstance(articles.get(0)),
+                            getString(R.string.tag_detail_fragment)).commit();
+                }
+            });
         } else {
             setNewListFragment();
         }
@@ -105,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
      */
     private void setDrawerMenuItem(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
-            case R.id.channel_label_bbc_sports: //viewModel.setCurrFavChannel(getString(R.string.channel_bbc_sports));
+            case R.id.channel_label_bbc_sports:
                 replaceWithNavItemFragment(getString(R.string.channel_source_bbc_sports));
                 break;
             case R.id.channel_label_bleacher_report:
@@ -153,11 +172,14 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
      * @param channel : selected channel name
      */
     private void replaceWithNavItemFragment(String channel) {
-        ArticleListFragment fragment =
-                (ArticleListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.tag_article_list_fragment));
-        if (fragment != null) {
-            //setUpToolBar(channel);
-            fragment.changeMenuItemUpdateNewsList(channel);
+        if(isTwoPane) {
+            viewModel.setChannel(channel);
+        } else {
+            ArticleListFragment fragment =
+                    (ArticleListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.tag_article_list_fragment));
+            if (fragment != null) {
+                fragment.changeMenuItemUpdateNewsList(channel);
+            }
         }
     }
 
@@ -165,7 +187,6 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
      * set list of news in list-fragment
      */
     private void setNewListFragment() {
-        //setUpToolBar(viewModel.getDefaultOrFavChannel());
         ArticleListFragment fragment = ArticleListFragment.newInstance(viewModel.getDefaultOrFavChannel());
         manager.beginTransaction().add(R.id.news_article_list_container,
                 fragment, getString(R.string.tag_article_list_fragment))
@@ -192,8 +213,15 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * @param article : open new activity if mobile device
+     */
     @Override
     public void setArticleSelectedInDetailScreen(Article article) {
-        Timber.d(article.getTitle());
+        if(!isTwoPane) {
+            Intent intent = new Intent(this, DetailActivity.class);
+            intent.putExtra(AppConstants.KEY_BUNDLE_PARCELLABLE, article);
+            startActivity(intent);
+        }
     }
 }

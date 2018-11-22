@@ -13,4 +13,6 @@ public final class AppConstants {
 
     public static final String TOP_HEADLINES = "top-headlines";
 
+    public static final String KEY_BUNDLE_PARCELLABLE  = "KEY_BUNDLE_PARCELLABLE";
+
 }
