@@ -21,14 +21,14 @@ public interface FavDao {
     @Query("SELECT COUNT(*) FROM news_favourites")
     LiveData<Integer> getFavouritesNewsListSize();
 
-    @Query("SELECT COUNT(id) FROM news_favourites WHERE id = :newsId")
-    LiveData<Integer> isFavourite(int newsId);
+    @Query("SELECT COUNT(id) FROM news_favourites WHERE title = :title")
+    LiveData<Integer> isFavourite(String title);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertNewsMovie(Article article);
 
-    @Query("DELETE FROM news_favourites WHERE id = :movieId")
-    void deleteArticleMovie(int movieId);
+    @Query("DELETE FROM news_favourites WHERE title = :movieTitle")
+    void deleteArticleMovie(String movieTitle);
 
     @Query("DELETE FROM news_favourites")
     void deleteAllArticles();

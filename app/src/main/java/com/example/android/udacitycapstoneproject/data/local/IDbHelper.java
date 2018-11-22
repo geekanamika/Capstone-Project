@@ -12,7 +12,7 @@ import java.util.List;
 public interface IDbHelper {
 
     void insertFavouriteNews(Article fav);
-    void removeFromFavourite(int id);
-    LiveData<Integer> checkIfMovieIsFavourite(int id);
+    void removeFromFavourite(String title);
+    LiveData<Integer> checkIfMovieIsFavourite(String title);
     LiveData<List<Article>> getFavouriteArticles();
 }

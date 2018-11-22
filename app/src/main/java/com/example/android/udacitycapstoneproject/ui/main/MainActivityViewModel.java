@@ -51,11 +51,24 @@ public class MainActivityViewModel extends AndroidViewModel {
         return channel;
     }
 
-    public void setChannel(String channel) {
+    void setChannel(String channel) {
         this.channel.postValue(channel);
     }
 
     String getDefaultOrFavChannel() {
         return repository.getDefaultOrFavChannel();
     }
+
+    public void saveFavouriteNews(Article article) {
+        repository.insertFavouriteNews(article);
+    }
+
+    public LiveData<Integer> isFavourite(String title) {
+        return repository.checkIfMovieIsFavourite(title);
+    }
+
+    public void removeFromFav(String title) {
+        repository.removeFromFavourite(title);
+    }
+
 }

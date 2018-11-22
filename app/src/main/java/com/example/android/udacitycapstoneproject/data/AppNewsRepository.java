@@ -47,13 +47,13 @@ public class AppNewsRepository implements INewsRepository {
     }
 
     @Override
-    public void removeFromFavourite(int id) {
+    public void removeFromFavourite(String id) {
         dbHelper.removeFromFavourite(id);
     }
 
     @Override
-    public LiveData<Integer> checkIfMovieIsFavourite(int id) {
-        return dbHelper.checkIfMovieIsFavourite(id);
+    public LiveData<Integer> checkIfMovieIsFavourite(String title) {
+        return dbHelper.checkIfMovieIsFavourite(title);
     }
 
     @Override

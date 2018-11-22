@@ -50,7 +50,7 @@ public class AppDbHelper implements IDbHelper {
     }
 
     @Override
-    public void removeFromFavourite(final int id) {
+    public void removeFromFavourite(final String id) {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -61,7 +61,7 @@ public class AppDbHelper implements IDbHelper {
     }
 
     @Override
-    public LiveData<Integer> checkIfMovieIsFavourite(int id) {
+    public LiveData<Integer> checkIfMovieIsFavourite(String id) {
         return favDao.isFavourite(id);
     }
 

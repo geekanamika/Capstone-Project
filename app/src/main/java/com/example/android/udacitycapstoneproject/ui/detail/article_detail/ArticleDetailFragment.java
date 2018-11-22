@@ -71,9 +71,6 @@ public class ArticleDetailFragment extends Fragment {
         }
         context = getContext();
         isTwoPane = context.getResources().getBoolean(R.bool.isTablet);
-        if(isTwoPane) {
-            viewModel = ViewModelProviders.of(getActivity()).get(MainActivityViewModel.class);
-        }
         return inflater.inflate(R.layout.article_detail_fragment, container, false);
     }
 
@@ -92,6 +89,20 @@ public class ArticleDetailFragment extends Fragment {
             });
         }
         likeButton = view.findViewById(R.id.heart_button);
+        viewModel.isFavourite(articleData.getTitle()).observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(@Nullable Integer flag) {
+                if (flag != null) {
+                    if(flag>0) {
+                        Timber.d("is favourite val "+ flag);
+                        likeButton.setLiked(true);
+                    } else {
+                        likeButton.setLiked(false);
+                    }
+                }
+            }
+        });
+
         setValuesToViews();
         heartButtonListener();
     }
@@ -100,12 +111,12 @@ public class ArticleDetailFragment extends Fragment {
         likeButton.setOnLikeListener(new OnLikeListener() {
             @Override
             public void liked(LikeButton likeButton) {
-                Timber.d("liked");
+                viewModel.saveFavouriteNews(articleData);
             }
 
             @Override
             public void unLiked(LikeButton likeButton) {
-                Timber.d("disliked");
+                viewModel.removeFromFav(articleData.getTitle());
             }
         });
     }

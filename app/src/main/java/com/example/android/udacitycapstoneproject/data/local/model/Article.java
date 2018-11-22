@@ -92,6 +92,14 @@ public class Article implements Parcelable
         this.content = content;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getAuthor() {
         return author;
     }

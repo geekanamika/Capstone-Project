@@ -3,8 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.android.udacitycapstoneproject.ui.main.MainActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_favourite"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+        android:icon="@drawable/ic_favourite"
+        android:title="@string/mark_as_favourite"
+        app:showAsAction="always" />
 </menu>

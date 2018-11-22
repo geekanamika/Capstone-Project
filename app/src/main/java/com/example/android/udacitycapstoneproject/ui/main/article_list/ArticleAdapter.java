@@ -29,8 +29,8 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.MyViewHo
     private Context mContext;
     private final ArticleOnClickListener articleOnClickListener;
 
-    ArticleAdapter(Context mContext,
-                   ArticleOnClickListener articleOnClickListener) {
+    public ArticleAdapter(Context mContext,
+                          ArticleOnClickListener articleOnClickListener) {
         listOfArticles = new ArrayList<>();
         this.mContext = mContext;
         this.articleOnClickListener = articleOnClickListener;

@@ -55,4 +55,6 @@
     <string name="favorite">favourite button</string>
     <string name="by">By %s</string>
     <string name="tag_detail_fragment">detail fragment</string>
+    <string name="mark_as_favourite">Mark as Favourite</string>
+    <string name="tag_fav_list_fragment">favourite list fragment</string>
 </resources>

@@ -20,6 +20,7 @@ import com.example.android.udacitycapstoneproject.R;
 import com.example.android.udacitycapstoneproject.data.local.model.Article;
 import com.example.android.udacitycapstoneproject.ui.detail.DetailActivity;
 import com.example.android.udacitycapstoneproject.ui.detail.article_detail.ArticleDetailFragment;
+import com.example.android.udacitycapstoneproject.ui.favourites.FavouriteActivity;
 import com.example.android.udacitycapstoneproject.ui.main.article_list.ArticleListFragment;
 import com.example.android.udacitycapstoneproject.utils.AppConstants;
 
@@ -50,11 +51,9 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
         // set layout
         setContentView(R.layout.activity_main);
 
-        //drawerLayout = findViewById(R.id.drawer_layout);
-        //navigationView = findViewById(R.id.nav_view);
-        //Toolbar toolbar = findViewById(R.id.main_activity_toolbar);
         ButterKnife.bind(this);
         toolbar.setTitle(getString(R.string.app_name));
+        setSupportActionBar(toolbar);
         isTwoPane = getResources().getBoolean(R.bool.isTablet);
         manager = getSupportFragmentManager();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -208,9 +207,12 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
         switch (item.getItemId()) {
             case android.R.id.home:
                 drawerLayout.openDrawer(GravityCompat.START);
+                break;
+            case R.id.action_favourite : startActivity(new Intent(this, FavouriteActivity.class));
                 return true;
+
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     /**
