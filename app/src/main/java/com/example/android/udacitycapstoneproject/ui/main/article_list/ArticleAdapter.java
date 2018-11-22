@@ -64,7 +64,8 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.MyViewHo
             Picasso.with(mContext)
                     .load(listOfArticles.get(i).getUrlToImage())
                     .error(R.drawable.error)
-                    .centerCrop()
+//                    .resize(myViewHolder.itemNewsThumbnail.getMeasuredWidth(),myViewHolder.itemNewsThumbnail.getMeasuredHeight())
+//                    .centerCrop()
                     .into(myViewHolder.itemNewsThumbnail);
         }
 

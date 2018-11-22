@@ -79,6 +79,7 @@ public class AppNetworkSource {
                 if (response.isSuccessful()) {
                     // posting value to the live data
                     mDownloadedNewsArticles.postValue(response.body().getArticles());
+                    Timber.d(response.body().getArticles().get(0).getTitle());
                     isLoading.postValue(false);
                 }
             }

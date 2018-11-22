@@ -2,54 +2,60 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/channel_bbc_sports"
+            android:id="@+id/channel_label_bbc_sports"
             android:icon="@drawable/ic_label"
-            android:title="@string/channel_bbc_sports" />
+            android:title="@string/channel_label_bbc_sports" />
         <item
-            android:id="@+id/channel_bleacher_report"
+            android:id="@+id/channel_label_bleacher_report"
             android:icon="@drawable/ic_label"
-            android:title="@string/channel_bleacher_report" />
+            android:title="@string/channel_label_bleacher_report" />
         <item
-            android:id="@+id/channel_espn"
+            android:id="@+id/channel_label_espn"
             android:icon="@drawable/ic_label"
-            android:title="@string/channel_espn" />
+            android:title="@string/channel_label_espn" />
         <item
-            android:id="@+id/channel_espn_cric_info"
+            android:id="@+id/channel_label_espn_cric_info"
             android:icon="@drawable/ic_label"
-            android:title="@string/channel_espn_cric_info" />
+            android:title="@string/channel_label_espn_cric_info" />
 
         <item
-            android:id="@+id/channel_football_italia"
+            android:id="@+id/channel_label_football_italia"
             android:icon="@drawable/ic_label"
-            android:title="@string/channel_football_italia" />
+            android:title="@string/channel_label_football_italia" />
         <item
-            android:id="@+id/channel_four_four_Two"
+            android:id="@+id/channel_label_four_four_Two"
             android:icon="@drawable/ic_label"
-            android:title="@string/channel_four_four_Two" />
+            android:title="@string/channel_label_four_four_Two" />
         <item
-            android:id="@+id/channel_fox_sports"
+            android:id="@+id/channel_label_fox_sports"
             android:icon="@drawable/ic_label"
-            android:title="@string/channel_fox_sports" />
+            android:title="@string/channel_label_fox_sports" />
         <item
-            android:id="@+id/channel_le_quipe"
+            android:id="@+id/channel_label_le_quipe"
             android:icon="@drawable/ic_label"
-            android:title="@string/channel_le_quipe" />
+            android:title="@string/channel_label_le_quipe" />
 
         <item
-            android:id="@+id/channel_marca"
+            android:id="@+id/channel_label_marca"
             android:icon="@drawable/ic_label"
-            android:title="@string/channel_marca" />
+            android:title="@string/channel_label_marca" />
         <item
-            android:id="@+id/channel_nhl_news"
+            android:id="@+id/channel_label_nhl_news"
             android:icon="@drawable/ic_label"
-            android:title="@string/channel_nhl_news" />
+            android:title="@string/channel_label_nhl_news" />
         <item
-            android:id="@+id/channel_nfl_news"
+            android:id="@+id/channel_label_nfl_news"
             android:icon="@drawable/ic_label"
-            android:title="@string/channel_nfl_news" />
+            android:title="@string/channel_label_nfl_news" />
+
         <item
-            android:id="@+id/channel_the_sport_bible"
+            android:id="@+id/channel_label_talk_sport"
             android:icon="@drawable/ic_label"
-            android:title="@string/channel_the_sport_bible" />
+            android:title="@string/channel_label_talk_sport" />
+
+        <item
+            android:id="@+id/channel_label_the_sport_bible"
+            android:icon="@drawable/ic_label"
+            android:title="@string/channel_label_the_sport_bible" />
     </group>
 </menu>

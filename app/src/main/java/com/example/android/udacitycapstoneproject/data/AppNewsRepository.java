@@ -64,7 +64,6 @@ public class AppNewsRepository implements INewsRepository {
     /**
      * network related methods
      */
-
     @Override
     public LiveData<List<Article>> getTopNewsHeadlines() {
         return networkHelper.getDownloadedNewsArticles();

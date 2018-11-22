@@ -11,9 +11,7 @@ import retrofit2.http.Query;
  */
 public interface WebService {
 
-    //top-headlines?sources=bbc-sport&apiKey=
-    //everything?sources=bbc-sport&apiKey=
     @GET("top-headlines")
     Call<NewsResponse> loadTopHeadlines(@Query("sources") String source,
-                                        @Query("api_key") String api_key);
+                                        @Query("apiKey") String api_key);
 }

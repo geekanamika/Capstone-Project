@@ -1,26 +1,31 @@
 package com.example.android.udacitycapstoneproject.ui.main.article_list;
 
+import android.app.Application;
+import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
+import android.support.annotation.NonNull;
 
 import com.example.android.udacitycapstoneproject.data.AppNewsRepository;
 import com.example.android.udacitycapstoneproject.data.local.model.Article;
+import com.example.android.udacitycapstoneproject.utils.InjectorUtil;
 
 import java.util.List;
 
 /**
  * Created by Anamika Tripathi on 13/11/18.
  */
-class ArticleListViewModel extends ViewModel {
+class ArticleListViewModel extends AndroidViewModel {
 
     private LiveData<List<Article>> newsNetworkLiveData;
-    private LiveData<List<Article>> favouriteNewsData;
-    AppNewsRepository repository;
+    private AppNewsRepository repository;
+    private String channel;
 
-    public ArticleListViewModel() {
+    public ArticleListViewModel(@NonNull Application application) {
+        super(application);
+
+        repository = InjectorUtil.provideRepository(application.getApplicationContext());
         newsNetworkLiveData = repository.getTopNewsHeadlines();
-        favouriteNewsData = repository.getFavouriteArticles();
-        startFetchingData(repository.getDefaultOrFavChannel());
     }
 
     //Todo get current channel instead of bbc-news always
@@ -36,7 +41,12 @@ class ArticleListViewModel extends ViewModel {
         return newsNetworkLiveData;
     }
 
-    public LiveData<List<Article>> getFavouriteNewsData() {
-        return favouriteNewsData;
+    public String getChannel() {
+        return channel;
+    }
+
+    public void setChannel(String channel) {
+        this.channel = channel;
+        startFetchingData(channel);
     }
 }

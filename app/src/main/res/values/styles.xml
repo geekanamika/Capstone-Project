@@ -18,6 +18,8 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:color">#FFF</item>
+        <item name="android:text">@string/app_name</item>
         <item name="android:textSize">18sp</item>
     </style>
 
