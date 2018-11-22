@@ -3,7 +3,9 @@ package com.example.android.udacitycapstoneproject.ui.main;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -22,6 +24,7 @@ import com.example.android.udacitycapstoneproject.ui.detail.DetailActivity;
 import com.example.android.udacitycapstoneproject.ui.detail.article_detail.ArticleDetailFragment;
 import com.example.android.udacitycapstoneproject.ui.favourites.FavouriteActivity;
 import com.example.android.udacitycapstoneproject.ui.main.article_list.ArticleListFragment;
+import com.example.android.udacitycapstoneproject.ui.settings.SettingsActivity;
 import com.example.android.udacitycapstoneproject.utils.AppConstants;
 
 import java.util.List;
@@ -41,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
     FragmentManager manager;
     private boolean isTwoPane;
 
-    MainActivityViewModel viewModel;
+    private SharedViewModel viewModel;
 
 
     @Override
@@ -63,20 +66,17 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
         toggle.syncState();
         // init view-model & observe any data
         observeViewModel();
+        // set fav channel as home
+        viewModel.setChannel(viewModel.getFavouriteChannel());
+        Timber.d(viewModel.getFavouriteChannel());
+        setUpUIForDifferentScreenSize();
+        // set up drawer content
+        setUpDrawerContent();
     }
 
     // observing view model
     private void observeViewModel() {
-        viewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        setUpUIForDifferentScreenSize();
-        // set up drawer content
-        setUpDrawerContent();
+        viewModel = ViewModelProviders.of(this).get(SharedViewModel.class);
     }
 
     /**
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
             viewModel.getNewsNetworkLiveData().observe(this, new Observer<List<Article>>() {
                 @Override
                 public void onChanged(@Nullable List<Article> articles) {
-                    manager.beginTransaction().add(R.id.news_article_detail_container,
+                    manager.beginTransaction().replace(R.id.news_article_detail_container,
                             ArticleDetailFragment.newInstance(articles.get(0)),
                             getString(R.string.tag_detail_fragment)).commit();
                 }
@@ -175,7 +175,8 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
             viewModel.setChannel(channel);
         } else {
             ArticleListFragment fragment =
-                    (ArticleListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.tag_article_list_fragment));
+                    (ArticleListFragment) getSupportFragmentManager()
+                            .findFragmentByTag(getString(R.string.tag_article_list_fragment));
             if (fragment != null) {
                 fragment.changeMenuItemUpdateNewsList(channel);
             }
@@ -185,10 +186,12 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
     /**
      * set list of news in list-fragment
      */
+
     private void setNewListFragment() {
-        ArticleListFragment fragment = ArticleListFragment.newInstance(viewModel.getDefaultOrFavChannel());
+        ArticleListFragment listFragment = ArticleListFragment.newInstance(viewModel.getFavouriteChannel());
+
         manager.beginTransaction().add(R.id.news_article_list_container,
-                fragment, getString(R.string.tag_article_list_fragment))
+                listFragment, getString(R.string.tag_article_list_fragment))
                 .commit();
     }
 
@@ -210,7 +213,8 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
                 break;
             case R.id.action_favourite : startActivity(new Intent(this, FavouriteActivity.class));
                 return true;
-
+            case R.id.action_settings : startActivity(new Intent(this, SettingsActivity.class));
+                return true;
         }
         return true;
     }
@@ -220,7 +224,10 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
      */
     @Override
     public void setArticleSelectedInDetailScreen(Article article) {
-        if(!isTwoPane) {
+        if(isTwoPane) {
+            viewModel.setArticleMutableLiveData(article);
+        }
+        else {
             Intent intent = new Intent(this, DetailActivity.class);
             intent.putExtra(AppConstants.KEY_BUNDLE_PARCELLABLE, article);
             startActivity(intent);

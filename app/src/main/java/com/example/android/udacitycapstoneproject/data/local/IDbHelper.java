@@ -15,4 +15,5 @@ public interface IDbHelper {
     void removeFromFavourite(String title);
     LiveData<Integer> checkIfMovieIsFavourite(String title);
     LiveData<List<Article>> getFavouriteArticles();
+    LiveData<Article> getFavouriteFirstArticle();
 }

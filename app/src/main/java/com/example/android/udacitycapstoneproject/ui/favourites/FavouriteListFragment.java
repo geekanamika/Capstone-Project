@@ -29,7 +29,8 @@ public class FavouriteListFragment extends Fragment implements ArticleAdapter.Ar
     private RecyclerView newListView;
     private Context context;
     private ArticleAdapter adapter;
-    private FavouriteViewmodel favouriteViewmodel;
+    private FavouriteViewModel favouriteViewmodel;
+    private OnArticleListListener mListener;
 
     @Nullable
     @Override
@@ -53,6 +54,17 @@ public class FavouriteListFragment extends Fragment implements ArticleAdapter.Ar
         newListView = view.findViewById(R.id.main_activity_recycler_view);
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnArticleListListener) {
+            mListener = (OnArticleListListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnArticleListListener");
+        }
+    }
+
     /**
      * set up recycler-view, set linear layout to it
      */
@@ -68,7 +80,7 @@ public class FavouriteListFragment extends Fragment implements ArticleAdapter.Ar
      * set up view-model & set up list with updated network content
      */
     private void viewModelSetUp() {
-        favouriteViewmodel = ViewModelProviders.of(this).get(FavouriteViewmodel.class);
+        favouriteViewmodel = ViewModelProviders.of(this).get(FavouriteViewModel.class);
         favouriteViewmodel.getFavouriteMovies().observe(this, new Observer<List<Article>>() {
             @Override
             public void onChanged(@Nullable List<Article> articles) {
@@ -77,12 +89,11 @@ public class FavouriteListFragment extends Fragment implements ArticleAdapter.Ar
                 }
             }
         });
-
     }
 
     @Override
     public void onArticleClick(Article article) {
-        Timber.d(article.getTitle());
+        mListener.setArticleSelectedInDetailScreen(article);
     }
 
     /**

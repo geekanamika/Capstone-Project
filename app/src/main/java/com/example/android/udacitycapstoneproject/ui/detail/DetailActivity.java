@@ -31,7 +31,7 @@ public class DetailActivity extends AppCompatActivity {
                 Article article = data.getParcelable(AppConstants.KEY_BUNDLE_PARCELLABLE);
                 if (article != null) {
                     ArticleDetailFragment detailFragment = ArticleDetailFragment.newInstance(article);
-                    getSupportFragmentManager().beginTransaction().add(R.id.news_article_detail_container,
+                    getSupportFragmentManager().beginTransaction().replace(R.id.news_article_detail_container,
                             detailFragment, getString((R.string.detail_fragment))).commit();
                 }
 

@@ -18,6 +18,9 @@ public interface FavDao {
     @Query("SELECT * FROM news_favourites")
     LiveData<List<Article>> getFavouritesNewsList();
 
+    @Query("SELECT * FROM news_favourites WHERE id = :id")
+    LiveData<Article> getFavouriteFirstNews(int id);
+
     @Query("SELECT COUNT(*) FROM news_favourites")
     LiveData<Integer> getFavouritesNewsListSize();
 

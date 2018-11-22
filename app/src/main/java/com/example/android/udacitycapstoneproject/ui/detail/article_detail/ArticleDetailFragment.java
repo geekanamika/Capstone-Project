@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ShareCompat;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +17,7 @@ import android.widget.TextView;
 
 import com.example.android.udacitycapstoneproject.R;
 import com.example.android.udacitycapstoneproject.data.local.model.Article;
-import com.example.android.udacitycapstoneproject.ui.main.MainActivityViewModel;
+import com.example.android.udacitycapstoneproject.ui.main.SharedViewModel;
 import com.example.android.udacitycapstoneproject.utils.AppConstants;
 import com.like.LikeButton;
 import com.like.OnLikeListener;
@@ -31,9 +30,7 @@ import timber.log.Timber;
 
 public class ArticleDetailFragment extends Fragment {
 
-    private MainActivityViewModel viewModel;
-    @BindView(R.id.toolbar_detail)
-    Toolbar mToolbar;
+    private SharedViewModel viewModel;
 
     @BindView(R.id.news_image_detail)
     ImageView newsImage;
@@ -64,7 +61,7 @@ public class ArticleDetailFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        viewModel = ViewModelProviders.of(getActivity()).get(MainActivityViewModel.class);
+        viewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
 
         if (getArguments() != null) {
             articleData = getArguments().getParcelable(AppConstants.KEY_BUNDLE_PARCELLABLE);

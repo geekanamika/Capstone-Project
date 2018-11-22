@@ -14,16 +14,16 @@ import java.util.List;
 /**
  * Created by Anamika Tripathi on 22/11/18.
  */
-public class FavouriteViewmodel extends AndroidViewModel {
+public class FavouriteViewModel extends AndroidViewModel {
 
     private AppNewsRepository repository;
-    public FavouriteViewmodel(@NonNull Application application) {
+    public FavouriteViewModel(@NonNull Application application) {
         super(application);
         repository = InjectorUtil.provideRepository(application.getApplicationContext());
 
     }
 
-    public LiveData<List<Article>> getFavouriteMovies() {
+    LiveData<List<Article>> getFavouriteMovies() {
         return repository.getFavouriteArticles();
     }
 

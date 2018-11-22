@@ -69,4 +69,9 @@ public class AppDbHelper implements IDbHelper {
     public LiveData<List<Article>> getFavouriteArticles() {
         return favDao.getFavouritesNewsList();
     }
+
+    @Override
+    public LiveData<Article> getFavouriteFirstArticle() {
+        return favDao.getFavouriteFirstNews(0);
+    }
 }

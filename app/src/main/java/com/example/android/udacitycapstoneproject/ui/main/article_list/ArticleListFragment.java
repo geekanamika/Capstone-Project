@@ -16,8 +16,7 @@ import android.view.ViewGroup;
 
 import com.example.android.udacitycapstoneproject.R;
 import com.example.android.udacitycapstoneproject.data.local.model.Article;
-import com.example.android.udacitycapstoneproject.ui.main.MainActivity;
-import com.example.android.udacitycapstoneproject.ui.main.MainActivityViewModel;
+import com.example.android.udacitycapstoneproject.ui.main.SharedViewModel;
 
 import java.util.List;
 
@@ -29,7 +28,7 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Arti
     private String channel;
     private Context context;
     private ArticleAdapter adapter;
-    private MainActivityViewModel sharedViewModel;
+    private SharedViewModel sharedViewModel;
     private ArticleListViewModel articleListViewModel;
     private SwipeRefreshLayout swipeRefreshLayout;
     private boolean isTwoPane;
@@ -99,7 +98,7 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Arti
     private void viewModelSetUp() {
         if(isTwoPane) {
             if (getActivity() != null) {
-                sharedViewModel = ViewModelProviders.of(getActivity()).get(MainActivityViewModel.class);
+                sharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
                 sharedViewModel.getNewsNetworkLiveData().observe(this, new Observer<List<Article>>() {
                     @Override
                     public void onChanged(@Nullable List<Article> articles) {
@@ -171,11 +170,7 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Arti
     @Override
 
     public void onArticleClick(Article article) {
-        if(isTwoPane) {
-            sharedViewModel.setArticleMutableLiveData(article);
-        } else {
-            mListener.setArticleSelectedInDetailScreen(article);
-        }
+        mListener.setArticleSelectedInDetailScreen(article);
     }
 
     /**

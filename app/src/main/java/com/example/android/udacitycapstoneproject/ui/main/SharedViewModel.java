@@ -4,6 +4,8 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 
 import com.example.android.udacitycapstoneproject.data.AppNewsRepository;
@@ -16,19 +18,21 @@ import java.util.List;
 /**
  * Created by Anamika Tripathi on 13/11/18.
  */
-public class MainActivityViewModel extends AndroidViewModel {
+public class SharedViewModel extends AndroidViewModel {
 
     private AppNewsRepository repository;
     private LiveData<List<Article>> newsNetworkLiveData;
     private final MutableLiveData<String> channel;
     private final MutableLiveData<Article> articleMutableLiveData;
+    private SharedPreferences sharedPreferences;
 
-    public MainActivityViewModel(@NonNull Application application) {
+    public SharedViewModel(@NonNull Application application) {
         super(application);
         repository = InjectorUtil.provideRepository(application.getApplicationContext());
         newsNetworkLiveData = repository.getTopNewsHeadlines();
         channel = new MutableLiveData<>();
         articleMutableLiveData = new MutableLiveData<>();
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application.getApplicationContext());
     }
 
     public LiveData<Article> getArticleMutableLiveData() {
@@ -69,6 +73,14 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     public void removeFromFav(String title) {
         repository.removeFromFavourite(title);
+    }
+
+    public LiveData<Article> getFirstFavArticle() {
+        return repository.getFavouriteFirstArticle();
+    }
+
+    public String getFavouriteChannel() {
+        return sharedPreferences.getString("select fav channel", "bbc-sport");
     }
 
 }

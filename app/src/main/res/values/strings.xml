@@ -57,4 +57,28 @@
     <string name="tag_detail_fragment">detail fragment</string>
     <string name="mark_as_favourite">Mark as Favourite</string>
     <string name="tag_fav_list_fragment">favourite list fragment</string>
+    <string name="tag_fav_fragment_detail">fav detail fragment</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+    <!--Todo add all news channels in settings list -->
+    <string name="pref_title_add_friends_to_messages">Select favourite channel</string>
+    <string name="key_fav_channel">select fav channel</string>
+    <string-array name="pref_example_list_titles">
+        <item>BBC Sport</item>
+        <item>Bleacher Report</item>
+        <item>ESPN</item>
+    </string-array>
+    <string-array name="pref_example_list_values">
+        <item>bbc-sport</item>
+        <item>bleacher-report</item>
+        <item>espn</item>
+    </string-array>
+
+    <string-array name="multi_select_list_preference_default_value" />
+
 </resources>

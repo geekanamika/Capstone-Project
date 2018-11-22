@@ -61,6 +61,11 @@ public class AppNewsRepository implements INewsRepository {
         return dbHelper.getFavouriteArticles();
     }
 
+    @Override
+    public LiveData<Article> getFavouriteFirstArticle() {
+        return dbHelper.getFavouriteFirstArticle();
+    }
+
     /**
      * network related methods
      */
