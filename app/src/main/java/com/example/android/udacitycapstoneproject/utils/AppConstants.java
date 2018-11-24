@@ -15,4 +15,6 @@ public final class AppConstants {
 
     public static final String KEY_BUNDLE_PARCELLABLE  = "KEY_BUNDLE_PARCELLABLE";
 
+    public static final String TAG_PERIODIC_WORK_REQUEST = "periodic-work-request";
+
 }

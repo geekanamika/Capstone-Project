@@ -32,8 +32,6 @@ public class NewsResponse implements Parcelable
     ;
 
     protected NewsResponse(Parcel in) {
-//        this.status = ((String) in.readValue((String.class.getClassLoader())));
-//        this.totalResults = ((int) in.readValue((int.class.getClassLoader())));
         in.readList(this.articles, (Article.class.getClassLoader()));
     }
 
@@ -49,26 +47,9 @@ public class NewsResponse implements Parcelable
      */
     public NewsResponse(List<Article> articles) {
         super();
-//        this.status = status;
-//        this.totalResults = totalResults;
         this.articles = articles;
     }
 
-//    public String getStatus() {
-//        return status;
-//    }
-//
-//    public void setStatus(String status) {
-//        this.status = status;
-//    }
-//
-//    public int getTotalResults() {
-//        return totalResults;
-//    }
-//
-//    public void setTotalResults(int totalResults) {
-//        this.totalResults = totalResults;
-//    }
 
     public List<Article> getArticles() {
         return articles;
@@ -79,8 +60,6 @@ public class NewsResponse implements Parcelable
     }
 
     public void writeToParcel(Parcel dest, int flags) {
-//        dest.writeValue(status);
-//        dest.writeValue(totalResults);
         dest.writeList(articles);
     }
 
