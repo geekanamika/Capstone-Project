@@ -15,11 +15,4 @@
         android:title="@string/action_settings"
         app:showAsAction="never" />
 
-    <item
-        android:id="@+id/action_sync"
-        android:orderInCategory="100"
-        android:icon="@drawable/ic_cloud_sync"
-        android:title="@string/action_sync"
-        app:showAsAction="ifRoom" />
-
 </menu>

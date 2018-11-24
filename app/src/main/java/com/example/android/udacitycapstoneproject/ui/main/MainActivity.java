@@ -3,9 +3,7 @@ package com.example.android.udacitycapstoneproject.ui.main;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -26,19 +24,12 @@ import com.example.android.udacitycapstoneproject.ui.favourites.FavouriteActivit
 import com.example.android.udacitycapstoneproject.ui.main.article_list.ArticleListFragment;
 import com.example.android.udacitycapstoneproject.ui.settings.SettingsActivity;
 import com.example.android.udacitycapstoneproject.utils.AppConstants;
-import com.example.android.udacitycapstoneproject.worker.SyncNewsWorker;
 
 import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
-import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
-
-import static com.example.android.udacitycapstoneproject.utils.AppConstants.TAG_PERIODIC_WORK_REQUEST;
 
 public class MainActivity extends AppCompatActivity implements ArticleListFragment.OnArticleListListener {
 
@@ -50,9 +41,6 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
     Toolbar toolbar;
     private FragmentManager manager;
     private boolean isTwoPane;
-////    private PeriodicWorkRequest periodicWorkRequest;
-//    private SharedPreferences prefs;
-//    private SharedPreferences.OnSharedPreferenceChangeListener listener;
     private SharedViewModel viewModel;
 
     @Override
@@ -79,37 +67,7 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
         setUpUIForDifferentScreenSize();
         // set up drawer content
         setUpDrawerContent();
-
- //       registerNewsFavChangeListener();
     }
-
-//    /**
-//     * listener to change in fav channel & sync data using work-manager
-//     * cancel existing work manager instance
-//     */
-//    private void registerNewsFavChangeListener() {
-//        prefs = PreferenceManager.getDefaultSharedPreferences(this);
-//        listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
-//            @Override
-//            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-//                if(key.equals(getString(R.string.key_fav_channel))) {
-//                    Timber.d("fav channel changed");
-//                    if (periodicWorkRequest != null) {
-//                        UUID compressionWorkId = periodicWorkRequest.getId();
-//                        WorkManager.getInstance().cancelWorkById(compressionWorkId);
-//                        startWorkManager();
-//                    }
-//                }
-//            }
-//        };
-//        prefs.registerOnSharedPreferenceChangeListener(listener);
-//    }
-
-//    @Override
-//    protected void onDestroy() {
-//        super.onDestroy();
-//        prefs.unregisterOnSharedPreferenceChangeListener(listener);
-//    }
 
     // observing view model
     private void observeViewModel() {
@@ -251,28 +209,9 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
                 return true;
             case R.id.action_settings : startActivity(new Intent(this, SettingsActivity.class));
                 return true;
-            case R.id.action_sync: //startWorkManager();
-                return true;
         }
         return true;
     }
-
-//    /**
-//     * starts work manager using periodic work request
-//     */
-//    private void startWorkManager() {
-//        final WorkManager workManager = WorkManager.getInstance();
-//
-//        periodicWorkRequest =
-//                new PeriodicWorkRequest.Builder(SyncNewsWorker.class,
-//                        2, TimeUnit.MINUTES)
-//                        .addTag(TAG_PERIODIC_WORK_REQUEST)
-//                        .build();
-//
-//        // Queue the work
-//        Timber.d("work manager enqueue");
-//        workManager.enqueue(periodicWorkRequest);
-//    }
 
     /**
      * @param article : open new activity if mobile device

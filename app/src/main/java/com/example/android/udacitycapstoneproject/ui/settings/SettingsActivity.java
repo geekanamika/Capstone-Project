@@ -16,6 +16,8 @@ import android.view.MenuItem;
 
 import com.example.android.udacitycapstoneproject.MyApp;
 import com.example.android.udacitycapstoneproject.R;
+import com.example.android.udacitycapstoneproject.data.AppNewsRepository;
+import com.example.android.udacitycapstoneproject.utils.InjectorUtil;
 import com.example.android.udacitycapstoneproject.worker.SyncNewsWorker;
 
 import java.util.List;
@@ -178,6 +180,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
                     if(key.equals(getString(R.string.key_fav_channel))) {
                         Timber.d("fav channel changed");
+                        AppNewsRepository newsRepository = InjectorUtil.provideRepository(MyApp.getInstance());
+                        newsRepository.setDefaultOrFavChannel(sharedPreferences.getString(key,
+                                getString(R.string.channel_source_bbc_sports)));
                         if (periodicWorkRequest != null) {
                             UUID compressionWorkId = periodicWorkRequest.getId();
                             WorkManager.getInstance().cancelWorkById(compressionWorkId);

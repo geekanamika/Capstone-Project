@@ -70,7 +70,7 @@ public class SyncNewsWorker extends Worker {
 
     private String getTopThreeLatestNews(List<Article> articleList) {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < articleList.size() && i<2 ; i++) {
+        for (int i = 0; i < articleList.size() && i<3 ; i++) {
             sb.append("\n");
             sb.append(articleList.get(i).getTitle());
         }
