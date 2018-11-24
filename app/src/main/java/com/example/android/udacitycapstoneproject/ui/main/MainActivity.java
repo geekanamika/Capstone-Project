@@ -258,8 +258,6 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
 
     private void startWorkManager() {
         final WorkManager workManager = WorkManager.getInstance();
-//        final LiveData<List<WorkStatus>> statusesByTag = workManager
-//                .getStatusesByTagLiveData(TAG_PERIODIC_WORK_REQUEST);
 
         periodicWorkRequest =
                 new PeriodicWorkRequest.Builder(SyncNewsWorker.class,
@@ -268,6 +266,7 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
                         .build();
 
         // Queue the work
+        Timber.d("work manager enqued " + periodicWorkRequest.getId());
         workManager.enqueue(periodicWorkRequest);
 //        statusesByTag.observe(this, new Observer<List<WorkStatus>>() {
 //            @Override

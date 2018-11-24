@@ -17,4 +17,7 @@ public final class AppConstants {
 
     public static final String TAG_PERIODIC_WORK_REQUEST = "periodic-work-request";
 
+    public static final String HEADER_CACHE_CONTROL = "Cache-Control";
+    public static final String HEADER_PRAGMA = "Pragma";
+
 }
