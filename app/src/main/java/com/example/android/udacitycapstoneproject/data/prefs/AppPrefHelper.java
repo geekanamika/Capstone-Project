@@ -11,6 +11,7 @@ public class AppPrefHelper implements IPrefHelper{
     private final SharedPreferences sharedPreferences;
     private final String DEFAULT_CHANNEL_KEY = "DEFAULT-CHANNEL-KEY";
     private final String CURRENT_CHANNEL_KEY = "CURRENT-CHANNEL-KEY";
+    public static final String LATEST_TOP_THREE_NEWS_KEY = "LATEST_TOP_THREE_NEWS_KEY";
 
 
     public AppPrefHelper(Context context, String prefFileName) {
@@ -40,5 +41,15 @@ public class AppPrefHelper implements IPrefHelper{
     @Override
     public void setCurrentFavChannel(String channel) {
         sharedPreferences.edit().putString(CURRENT_CHANNEL_KEY, channel).apply();
+    }
+
+    @Override
+    public String getTopThreeLatestNews() {
+        return sharedPreferences.getString(LATEST_TOP_THREE_NEWS_KEY, "");
+    }
+
+    @Override
+    public void setTopThreeLatestNews(String threeLatestNews) {
+        sharedPreferences.edit().putString(LATEST_TOP_THREE_NEWS_KEY, threeLatestNews).apply();
     }
 }

@@ -8,4 +8,6 @@ public interface IPrefHelper {
     String getCurrentChannel();
     void setDefaultOrFavChannel(String channel);
     void setCurrentFavChannel(String channel);
+    String getTopThreeLatestNews();
+    void setTopThreeLatestNews(String threeLatestNews);
 }

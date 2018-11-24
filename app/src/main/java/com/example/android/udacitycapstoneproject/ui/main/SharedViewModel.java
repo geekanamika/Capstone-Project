@@ -83,4 +83,7 @@ public class SharedViewModel extends AndroidViewModel {
         return sharedPreferences.getString("select fav channel", "bbc-sport");
     }
 
+    public String getTopThreeNews() {
+       return repository.getTopThreeLatestNews();
+    }
 }

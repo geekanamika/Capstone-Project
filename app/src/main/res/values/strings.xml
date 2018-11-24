@@ -81,5 +81,7 @@
     </string-array>
 
     <string-array name="multi_select_list_preference_default_value" />
+    <string name="appwidget_text">Latest News</string>
+    <string name="add_widget">Add widget</string>
 
 </resources>

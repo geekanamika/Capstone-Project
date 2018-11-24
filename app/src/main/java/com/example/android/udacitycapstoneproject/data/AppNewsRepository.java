@@ -103,4 +103,14 @@ public class AppNewsRepository implements INewsRepository {
     public void setCurrentFavChannel(String channel) {
         prefHelper.setCurrentFavChannel(channel);
     }
+
+    @Override
+    public String getTopThreeLatestNews() {
+        return prefHelper.getTopThreeLatestNews();
+    }
+
+    @Override
+    public void setTopThreeLatestNews(String threeLatestNews) {
+        prefHelper.setTopThreeLatestNews(threeLatestNews);
+    }
 }

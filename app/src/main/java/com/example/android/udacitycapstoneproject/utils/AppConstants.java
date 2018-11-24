@@ -20,4 +20,7 @@ public final class AppConstants {
     public static final String HEADER_CACHE_CONTROL = "Cache-Control";
     public static final String HEADER_PRAGMA = "Pragma";
 
+    public static final int PENDING_INTENT_REQUEST_CODE = 400;
+
+    public static final String LABEL_NEWS = "Latest News";
 }

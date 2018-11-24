@@ -1,6 +1,5 @@
 package com.example.android.udacitycapstoneproject.ui.main;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
@@ -16,7 +15,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -36,7 +34,6 @@ import java.util.concurrent.TimeUnit;
 
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
-import androidx.work.WorkStatus;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
@@ -53,13 +50,10 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
     Toolbar toolbar;
     private FragmentManager manager;
     private boolean isTwoPane;
-    private PeriodicWorkRequest periodicWorkRequest;
-    private SharedPreferences prefs;
-    private SharedPreferences.OnSharedPreferenceChangeListener listener;
+////    private PeriodicWorkRequest periodicWorkRequest;
+//    private SharedPreferences prefs;
+//    private SharedPreferences.OnSharedPreferenceChangeListener listener;
     private SharedViewModel viewModel;
-
-//    UUID compressionWorkId = compressionWork.getId();
-//    WorkManager.getInstance().cancelWorkById(compressionWorkId);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,33 +76,40 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
         observeViewModel();
         // set fav channel as home
         viewModel.setChannel(viewModel.getFavouriteChannel());
-        Timber.d(viewModel.getFavouriteChannel());
         setUpUIForDifferentScreenSize();
         // set up drawer content
         setUpDrawerContent();
 
-        prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
-            @Override
-            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-                if(key.equals(getString(R.string.key_fav_channel))) {
-                    Timber.d("new fav channel: " + getString(R.string.key_fav_channel));
-                    if (periodicWorkRequest != null) {
-                        UUID compressionWorkId = periodicWorkRequest.getId();
-                        WorkManager.getInstance().cancelWorkById(compressionWorkId);
-                        startWorkManager();
-                    }
-                }
-            }
-        };
-        prefs.registerOnSharedPreferenceChangeListener(listener);
+ //       registerNewsFavChangeListener();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        prefs.unregisterOnSharedPreferenceChangeListener(listener);
-    }
+//    /**
+//     * listener to change in fav channel & sync data using work-manager
+//     * cancel existing work manager instance
+//     */
+//    private void registerNewsFavChangeListener() {
+//        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+//        listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+//            @Override
+//            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+//                if(key.equals(getString(R.string.key_fav_channel))) {
+//                    Timber.d("fav channel changed");
+//                    if (periodicWorkRequest != null) {
+//                        UUID compressionWorkId = periodicWorkRequest.getId();
+//                        WorkManager.getInstance().cancelWorkById(compressionWorkId);
+//                        startWorkManager();
+//                    }
+//                }
+//            }
+//        };
+//        prefs.registerOnSharedPreferenceChangeListener(listener);
+//    }
+
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        prefs.unregisterOnSharedPreferenceChangeListener(listener);
+//    }
 
     // observing view model
     private void observeViewModel() {
@@ -250,44 +251,28 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
                 return true;
             case R.id.action_settings : startActivity(new Intent(this, SettingsActivity.class));
                 return true;
-            case R.id.action_sync: startWorkManager();
+            case R.id.action_sync: //startWorkManager();
                 return true;
         }
         return true;
     }
 
-    private void startWorkManager() {
-        final WorkManager workManager = WorkManager.getInstance();
-
-        periodicWorkRequest =
-                new PeriodicWorkRequest.Builder(SyncNewsWorker.class,
-                        2, TimeUnit.MINUTES)
-                        .addTag(TAG_PERIODIC_WORK_REQUEST)
-                        .build();
-
-        // Queue the work
-        Timber.d("work manager enqued " + periodicWorkRequest.getId());
-        workManager.enqueue(periodicWorkRequest);
-//        statusesByTag.observe(this, new Observer<List<WorkStatus>>() {
-//            @Override
-//            public void onChanged(@Nullable List<WorkStatus> workStatuses) {
-//                if (workStatuses == null || workStatuses.size() == 0) {
-//                    Timber.d("Queuing the Periodic Work");
-//                    // Create a periodic request
+//    /**
+//     * starts work manager using periodic work request
+//     */
+//    private void startWorkManager() {
+//        final WorkManager workManager = WorkManager.getInstance();
 //
-//                } else {
-//                    Timber.d("Work Status Size: " + workStatuses.size());
-//                    for (int i = 0; i < workStatuses.size(); i++) {
-//                        Timber.d("Work status id: " + workStatuses.get(i).getId());
-//                        Timber.d("Work status state: " + workStatuses.get(i).getState());
+//        periodicWorkRequest =
+//                new PeriodicWorkRequest.Builder(SyncNewsWorker.class,
+//                        2, TimeUnit.MINUTES)
+//                        .addTag(TAG_PERIODIC_WORK_REQUEST)
+//                        .build();
 //
-//                    }
-//                    Timber.d("Periodic Work already exists");
-//                }
-//            }
-//        });
-
-    }
+//        // Queue the work
+//        Timber.d("work manager enqueue");
+//        workManager.enqueue(periodicWorkRequest);
+//    }
 
     /**
      * @param article : open new activity if mobile device
@@ -303,4 +288,5 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
             startActivity(intent);
         }
     }
+
 }

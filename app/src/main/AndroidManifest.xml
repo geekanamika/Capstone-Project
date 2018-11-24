@@ -28,7 +28,17 @@
         <activity android:name=".ui.favourites.FavouriteActivity" />
         <activity
             android:name=".ui.settings.SettingsActivity"
-            android:label="@string/title_activity_settings"></activity>
+            android:label="@string/title_activity_settings" />
+
+        <receiver android:name=".ui.widgets.NewsWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/news_widget_info" />
+        </receiver>
     </application>
 
 </manifest>
