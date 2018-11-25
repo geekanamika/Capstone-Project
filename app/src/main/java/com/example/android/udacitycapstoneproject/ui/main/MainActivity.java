@@ -118,15 +118,9 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
     private void setUpUIForDifferentScreenSize() {
         if (isTwoPane && (orientation != Configuration.ORIENTATION_LANDSCAPE)) {
             setNewListFragment();
-            //Todo solve here, instead of doing one extra network transaction
-            viewModel.getNewsNetworkLiveData().observe(this, new Observer<List<Article>>() {
-                @Override
-                public void onChanged(@Nullable List<Article> articles) {
-                    fragmentTransactionManager.beginTransaction().replace(R.id.news_article_detail_container,
-                            ArticleDetailFragment.newInstance(articles.get(0)),
-                            getString(R.string.tag_detail_fragment)).commit();
-                }
-            });
+            fragmentTransactionManager.beginTransaction().replace(R.id.news_article_detail_container,
+                    new ArticleDetailFragment(),
+                    getString(R.string.tag_detail_fragment)).commit();
         } else {
             setNewListFragment();
         }
@@ -207,13 +201,6 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
         if(isTwoPane && (orientation != Configuration.ORIENTATION_LANDSCAPE)) {
             viewModel.setChannel(channel);
         } else {
-//            ArticleListFragment fragment =
-//                    (ArticleListFragment) getSupportFragmentManager()
-//                            .findFragmentByTag(getString(R.string.tag_article_list_fragment));
-//            if (fragment != null) {
-//                fragment.changeMenuItemUpdateNewsList(channel);
-//            }
-            Timber.d(channel);
             viewModel.setCurrentChannel(channel);
         }
     }
@@ -222,7 +209,6 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
      * set list of news in list-fragment
      */
     private void setNewListFragment() {
-        Timber.d("replacing with new article-fragment");
         ArticleListFragment listFragment = new ArticleListFragment();
         fragmentTransactionManager.beginTransaction().replace(R.id.news_article_list_container,
                 listFragment, getString(R.string.tag_article_list_fragment))

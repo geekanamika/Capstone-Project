@@ -55,6 +55,7 @@ public class SyncNewsWorker extends Worker {
             if (myNewsResponse.code() == 200) {
                 NewsResponse data = myNewsResponse.body();
                 String latestTopThreeNews = getTopThreeLatestNews(data.getArticles());
+                newsRepository.setTopThreeLatestNews(latestTopThreeNews);
                 Timber.d("setting the latest news in prefences \n "  + latestTopThreeNews);
                 updateWidgetMethod(latestTopThreeNews);
             } else {
@@ -68,7 +69,7 @@ public class SyncNewsWorker extends Worker {
 
 
     private String getTopThreeLatestNews(List<Article> articleList) {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder("Latest News");
         for (int i = 0; i < articleList.size() && i<3 ; i++) {
             sb.append("\n");
             sb.append(articleList.get(i).getTitle());

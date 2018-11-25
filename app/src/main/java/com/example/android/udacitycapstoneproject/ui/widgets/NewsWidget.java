@@ -7,9 +7,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
 
+import com.example.android.udacitycapstoneproject.MyApp;
 import com.example.android.udacitycapstoneproject.R;
+import com.example.android.udacitycapstoneproject.data.AppNewsRepository;
 import com.example.android.udacitycapstoneproject.ui.main.MainActivity;
 import com.example.android.udacitycapstoneproject.utils.AppConstants;
+import com.example.android.udacitycapstoneproject.utils.InjectorUtil;
 
 /**
  * Implementation of App Widget functionality.
@@ -19,7 +22,8 @@ public class NewsWidget extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
-        CharSequence widgetText = context.getString(R.string.appwidget_text);
+        AppNewsRepository repository = InjectorUtil.provideRepository(MyApp.getInstance());
+        CharSequence widgetText = repository.getTopThreeLatestNews();
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.latest_news_widget);
         views.setTextViewText(R.id.news_text, widgetText);

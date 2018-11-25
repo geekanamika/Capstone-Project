@@ -67,7 +67,7 @@
 
     <!--Todo add all news channels in settings list -->
     <string name="pref_title_add_friends_to_messages">Select favourite currentChannel</string>
-    <string name="key_fav_channel">select fav currentChannel</string>
+    <string name="key_fav_channel">select fav channel</string>
     <string name="action_sync">Sync data</string>
     <string-array name="pref_example_list_titles">
         <item>BBC Sport</item>

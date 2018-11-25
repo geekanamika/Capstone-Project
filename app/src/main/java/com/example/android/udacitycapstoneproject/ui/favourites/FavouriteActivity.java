@@ -3,6 +3,7 @@ package com.example.android.udacitycapstoneproject.ui.favourites;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -28,6 +29,7 @@ public class FavouriteActivity extends AppCompatActivity implements FavouriteLis
     Toolbar toolbar;
     private boolean isTwoPane;
     private SharedViewModel sharedViewModel;
+    private int orientation;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,6 +40,7 @@ public class FavouriteActivity extends AppCompatActivity implements FavouriteLis
         isTwoPane = getResources().getBoolean(R.bool.isTablet);
         toolbar.setTitle(getString(R.string.app_name));
         setSupportActionBar(toolbar);
+        orientation = getResources().getConfiguration().orientation;
         sharedViewModel = ViewModelProviders.of(this).get(SharedViewModel.class);
         setUpUIForDifferentScreenSize();
     }
@@ -47,7 +50,7 @@ public class FavouriteActivity extends AppCompatActivity implements FavouriteLis
      */
     @Override
     public void setArticleSelectedInDetailScreen(Article article) {
-        if(isTwoPane) {
+        if(isTwoPane && (orientation != Configuration.ORIENTATION_LANDSCAPE)) {
             sharedViewModel.setArticleMutableLiveData(article);
         }
         else {
@@ -61,7 +64,7 @@ public class FavouriteActivity extends AppCompatActivity implements FavouriteLis
      * check if it's tablet or mobile phone, set layout accordingly
      */
     private void setUpUIForDifferentScreenSize() {
-        if (isTwoPane) {
+        if (isTwoPane && (orientation != Configuration.ORIENTATION_LANDSCAPE)) {
             Timber.d("tablet screen");
             setNewListFragment();
             sharedViewModel.getFirstFavArticle().observe(this,
