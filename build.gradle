@@ -48,4 +48,5 @@ ext {
     retrofitGsonVersion = '2.1.0'
     daggerVersion = '2.14.1'
     workVersion = '1.0.0-alpha10'
+    playServicesAds = '17.1.1'
 }

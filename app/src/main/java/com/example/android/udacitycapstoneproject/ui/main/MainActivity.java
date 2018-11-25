@@ -3,6 +3,7 @@ package com.example.android.udacitycapstoneproject.ui.main;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -24,12 +26,24 @@ import com.example.android.udacitycapstoneproject.ui.favourites.FavouriteActivit
 import com.example.android.udacitycapstoneproject.ui.main.article_list.ArticleListFragment;
 import com.example.android.udacitycapstoneproject.ui.settings.SettingsActivity;
 import com.example.android.udacitycapstoneproject.utils.AppConstants;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
+
+//Todo landscape bug fixes when nav item selected, it crashes
+//Todo favourite activity, detail fragment bug fix for tablet
+//Todo widget bug fix for tablets
+//Todo landscape automatically returns to shared-pref channel instead of current channel
+//Todo Add admob
+//Todo add dynamic link
+//Todo open link on button click article
 
 public class MainActivity extends AppCompatActivity implements ArticleListFragment.OnArticleListListener {
 
@@ -39,9 +53,12 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
     NavigationView navigationView;
     @BindView(R.id.main_activity_toolbar)
     Toolbar toolbar;
+    private InterstitialAd interstitialAd;
     private FragmentManager manager;
     private boolean isTwoPane;
     private SharedViewModel viewModel;
+    private int orientation;
+    private AdRequest ar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
 
         ButterKnife.bind(this);
         toolbar.setTitle(getString(R.string.app_name));
+        orientation = getResources().getConfiguration().orientation;
         setSupportActionBar(toolbar);
         isTwoPane = getResources().getBoolean(R.bool.isTablet);
         manager = getSupportFragmentManager();
@@ -67,6 +85,18 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
         setUpUIForDifferentScreenSize();
         // set up drawer content
         setUpDrawerContent();
+        // init mob id
+        initAddMob();
+    }
+
+    private void initAddMob() {
+        MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
+        interstitialAd = new InterstitialAd(this);
+        interstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        ar = new AdRequest
+                .Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build();
     }
 
     // observing view model
@@ -78,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
      * check if it's tablet or mobile phone, set layout accordingly
      */
     private void setUpUIForDifferentScreenSize() {
-        if (isTwoPane) {
+        if (isTwoPane && (orientation != Configuration.ORIENTATION_LANDSCAPE)) {
             Timber.d("tablet screen");
             setNewListFragment();
             viewModel.startFetchingData(viewModel.getDefaultOrFavChannel());
@@ -166,7 +196,7 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
      * @param channel : selected channel name
      */
     private void replaceWithNavItemFragment(String channel) {
-        if(isTwoPane) {
+        if(isTwoPane && (orientation != Configuration.ORIENTATION_LANDSCAPE)) {
             viewModel.setChannel(channel);
         } else {
             ArticleListFragment fragment =
@@ -184,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
     private void setNewListFragment() {
         ArticleListFragment listFragment = ArticleListFragment.newInstance(viewModel.getFavouriteChannel());
 
-        manager.beginTransaction().add(R.id.news_article_list_container,
+        manager.beginTransaction().replace(R.id.news_article_list_container,
                 listFragment, getString(R.string.tag_article_list_fragment))
                 .commit();
     }
@@ -205,7 +235,8 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
             case android.R.id.home:
                 drawerLayout.openDrawer(GravityCompat.START);
                 break;
-            case R.id.action_favourite : startActivity(new Intent(this, FavouriteActivity.class));
+            case R.id.action_favourite :
+                showAddAndShowFavourites();
                 return true;
             case R.id.action_settings : startActivity(new Intent(this, SettingsActivity.class));
                 return true;
@@ -213,12 +244,34 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
         return true;
     }
 
+    private void showAddAndShowFavourites() {
+        interstitialAd.loadAd(ar);
+        interstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+                interstitialAd.show();
+            }
+
+            @Override
+            public void onAdClosed() {
+                startActivity(new Intent(MainActivity.this, FavouriteActivity.class));
+            }
+
+            @Override
+            public void onAdFailedToLoad(int i) {
+                super.onAdFailedToLoad(i);
+                startActivity(new Intent(MainActivity.this, FavouriteActivity.class));
+            }
+        });
+    }
+
     /**
      * @param article : open new activity if mobile device
      */
     @Override
     public void setArticleSelectedInDetailScreen(Article article) {
-        if(isTwoPane) {
+        if(isTwoPane && (orientation != Configuration.ORIENTATION_LANDSCAPE)) {
             viewModel.setArticleMutableLiveData(article);
         }
         else {

@@ -18,11 +18,6 @@ public class AppPrefHelper implements IPrefHelper{
         sharedPreferences = context.getSharedPreferences(prefFileName, Context.MODE_PRIVATE);
     }
 
-
-    AppPrefHelper(SharedPreferences sharedPreferences) {
-        this.sharedPreferences = sharedPreferences;
-    }
-
     @Override
     public String getDefaultOrFavChannel() {
         return sharedPreferences.getString(DEFAULT_CHANNEL_KEY, "bbc-sport");

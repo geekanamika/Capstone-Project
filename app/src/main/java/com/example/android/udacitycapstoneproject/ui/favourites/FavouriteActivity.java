@@ -15,8 +15,6 @@ import com.example.android.udacitycapstoneproject.ui.detail.article_detail.Artic
 import com.example.android.udacitycapstoneproject.ui.main.SharedViewModel;
 import com.example.android.udacitycapstoneproject.utils.AppConstants;
 
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
@@ -66,11 +64,13 @@ public class FavouriteActivity extends AppCompatActivity implements FavouriteLis
         if (isTwoPane) {
             Timber.d("tablet screen");
             setNewListFragment();
-            sharedViewModel.getFirstFavArticle().observe(this, new Observer<Article>() {
+            sharedViewModel.getFirstFavArticle().observe(this,
+                    new Observer<Article>() {
                 @Override
                 public void onChanged(@Nullable Article article) {
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.news_article_detail_container, ArticleDetailFragment.newInstance(article)
+                            .replace(R.id.news_article_detail_container,
+                                    ArticleDetailFragment.newInstance(article)
                             , getString(R.string.tag_fav_fragment_detail)).commit();
                 }
             });

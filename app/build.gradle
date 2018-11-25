@@ -48,8 +48,8 @@ dependencies {
     annotationProcessor "android.arch.persistence.room:compiler:$roomVersion"
     // WorkManager for background service
     implementation "android.arch.work:work-runtime:$rootProject.ext.workVersion"
-    // optional - Firebase JobDispatcher support
-    implementation "android.arch.work:work-firebase:$rootProject.ext.workVersion"
+//    // optional - Firebase JobDispatcher support
+//    implementation "android.arch.work:work-firebase:$rootProject.ext.workVersion"
 
     // picasso
     implementation "com.squareup.picasso:picasso:$rootProject.ext.picassoVersion"
@@ -60,6 +60,8 @@ dependencies {
     implementation "com.jakewharton.timber:timber:$rootProject.ext.timberVersion"
     // like button
     implementation 'com.github.jd-alexander:LikeButton:0.2.3'
+    // google ads
+    implementation 'com.google.android.gms:play-services-ads:17.0.0'
     // junit
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:rules:1.0.2'
