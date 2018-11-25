@@ -3,6 +3,8 @@ package com.example.android.udacitycapstoneproject.ui.main.article_list;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,13 +19,14 @@ import android.view.ViewGroup;
 import com.example.android.udacitycapstoneproject.R;
 import com.example.android.udacitycapstoneproject.data.local.model.Article;
 import com.example.android.udacitycapstoneproject.ui.main.SharedViewModel;
+import com.example.android.udacitycapstoneproject.utils.AppConstants;
 
 import java.util.List;
 
 import timber.log.Timber;
 
 // Todo before fetching data, check internet connectivity
-public class ArticleListFragment extends Fragment implements ArticleAdapter.ArticleOnClickListener{
+public class ArticleListFragment extends Fragment implements ArticleAdapter.ArticleOnClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private OnArticleListListener mListener;
     RecyclerView newListView;
@@ -34,14 +37,15 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Arti
     private ArticleListViewModel articleListViewModel;
     private SwipeRefreshLayout swipeRefreshLayout;
     private boolean isTwoPane;
+    private int orientation;
 
-    public static ArticleListFragment newInstance(String name){
-        Bundle bundle = new Bundle();
-        bundle.putString("channel_name", name);
-        ArticleListFragment listFragment = new ArticleListFragment();
-        listFragment.setArguments(bundle);
-        return listFragment;
-    }
+//    public static ArticleListFragment newInstance(String name){
+//        Bundle bundle = new Bundle();
+//        bundle.putString("channel_name", name);
+//        ArticleListFragment listFragment = new ArticleListFragment();
+//        listFragment.setArguments(bundle);
+//        return listFragment;
+//    }
 
     public ArticleListFragment() {
         // Required empty public constructor
@@ -55,11 +59,22 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Arti
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        if (getArguments() != null) {
-            channel = getArguments().getString("channel_name");
-        }
+        articleListViewModel = ViewModelProviders.of(this).get(ArticleListViewModel.class);
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_artcile_list, container, false);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        articleListViewModel.getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        articleListViewModel.getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -81,6 +96,7 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Arti
         context = getContext();
         isTwoPane = context.getResources().getBoolean(R.bool.isTablet);
         newListView = view.findViewById(R.id.main_activity_recycler_view);
+        orientation = getResources().getConfiguration().orientation;
     }
 
     /**
@@ -98,7 +114,7 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Arti
      * set up view-model & set up list with updated network content
      */
     private void viewModelSetUp() {
-        if(isTwoPane) {
+        if(isTwoPane && (orientation != Configuration.ORIENTATION_LANDSCAPE)) {
             if (getActivity() != null) {
                 sharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
                 sharedViewModel.getNewsNetworkLiveData().observe(this, new Observer<List<Article>>() {
@@ -120,7 +136,14 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Arti
                 });
             }
         } else {
-            articleListViewModel = ViewModelProviders.of(this).get(ArticleListViewModel.class);
+            articleListViewModel.getCurrentChannel().observe(this, new Observer<String>() {
+                @Override
+                public void onChanged(@Nullable String newChannel) {
+                    Timber.d("current channel changed to: " + newChannel);
+                    articleListViewModel.startFetchingData(newChannel);
+                    swipeRefreshLayout.setRefreshing(true);
+                }
+            });
             articleListViewModel.getNewsNetworkLiveData().observe(this, new Observer<List<Article>>() {
                 @Override
                 public void onChanged(@Nullable List<Article> articles) {
@@ -141,10 +164,10 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Arti
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if(isTwoPane){
+                if(isTwoPane && (orientation != Configuration.ORIENTATION_LANDSCAPE)){
                     sharedViewModel.startFetchingData(sharedViewModel.getChannel().getValue());
                 } else {
-                    articleListViewModel.startFetchingData(articleListViewModel.getChannel());
+                    articleListViewModel.startFetchingData(articleListViewModel.getChannelFromRepo());
                 }
 
             }
@@ -174,18 +197,20 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Arti
         mListener.setArticleSelectedInDetailScreen(article);
     }
 
+    //Todo shift shared preference access to view-model later
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if(key.equals(AppConstants.CURRENT_CHANNEL_KEY)) {
+            channel = sharedPreferences.getString(AppConstants.CURRENT_CHANNEL_KEY,"");
+            articleListViewModel.setCurrentChannel(channel);
+            Timber.d("channel changed in nav bar " + channel);
+        }
+    }
+
     /**
      * interface implemented by main-activity to open detail activity
      */
     public interface OnArticleListListener {
         void setArticleSelectedInDetailScreen(Article article);
-    }
-
-    /**
-     * only called for mobile devices
-     * @param channel : selected channel in nav bar
-     */
-    public void changeMenuItemUpdateNewsList(String channel){
-        articleListViewModel.setChannel(channel);
     }
 }

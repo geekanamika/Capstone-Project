@@ -4,8 +4,6 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 
 import com.example.android.udacitycapstoneproject.data.AppNewsRepository;
@@ -32,7 +30,7 @@ public class SharedViewModel extends AndroidViewModel {
         repository = InjectorUtil.provideRepository(application.getApplicationContext());
         newsNetworkLiveData = repository.getTopNewsHeadlines();
         channel = new MutableLiveData<>();
-        setChannel(getFavouriteChannel());
+        //setChannel(getFavouriteChannel());
         articleMutableLiveData = new MutableLiveData<>();
 
     }
@@ -86,7 +84,7 @@ public class SharedViewModel extends AndroidViewModel {
         return repository.getDefaultOrFavChannel();
     }
 
-    public String getTopThreeNews() {
-       return repository.getTopThreeLatestNews();
+    public void setCurrentChannel(String channel) {
+        repository.setCurrentChannel(channel);
     }
 }

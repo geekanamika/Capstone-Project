@@ -21,6 +21,10 @@ public class AppPrefHelper implements IPrefHelper{
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
+    public SharedPreferences getMySharedPrefences() {
+        return sharedPreferences;
+    }
+
     @Override
     public String getDefaultOrFavChannel() {
         return prefs.getString(DEFAULT_CHANNEL_KEY, "bbc-sport");
@@ -37,7 +41,7 @@ public class AppPrefHelper implements IPrefHelper{
     }
 
     @Override
-    public void setCurrentFavChannel(String channel) {
+    public void setCurrentChannel(String channel) {
         sharedPreferences.edit().putString(CURRENT_CHANNEL_KEY, channel).apply();
     }
 

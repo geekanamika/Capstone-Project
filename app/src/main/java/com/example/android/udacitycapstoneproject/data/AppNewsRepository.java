@@ -1,6 +1,7 @@
 package com.example.android.udacitycapstoneproject.data;
 
 import android.arch.lifecycle.LiveData;
+import android.content.SharedPreferences;
 
 import com.example.android.udacitycapstoneproject.data.local.AppDbHelper;
 import com.example.android.udacitycapstoneproject.data.local.model.Article;
@@ -100,8 +101,8 @@ public class AppNewsRepository implements INewsRepository {
     }
 
     @Override
-    public void setCurrentFavChannel(String channel) {
-        prefHelper.setCurrentFavChannel(channel);
+    public void setCurrentChannel(String channel) {
+        prefHelper.setCurrentChannel(channel);
     }
 
     @Override
@@ -112,5 +113,10 @@ public class AppNewsRepository implements INewsRepository {
     @Override
     public void setTopThreeLatestNews(String threeLatestNews) {
         prefHelper.setTopThreeLatestNews(threeLatestNews);
+    }
+
+    @Override
+    public SharedPreferences getMySharedPrefences() {
+        return prefHelper.getMySharedPrefences();
     }
 }

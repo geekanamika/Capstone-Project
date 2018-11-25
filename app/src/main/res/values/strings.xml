@@ -5,7 +5,7 @@
     <string name="navigation_drawer_open">Drawer Open</string>
     <string name="navigation_drawer_close">Drawer Closed</string>
 
-    <!-- channel source names -->
+    <!-- currentChannel source names -->
     <string name="channel_source_bbc_sports">bbc-sport</string>
     <string name="channel_source_bleacher_report">bleacher-report</string>
     <string name="channel_source_espn">espn</string>
@@ -20,7 +20,7 @@
     <string name="channel_source_talk_sport">talksport</string>
     <string name="channel_source_the_sport_bible">the-sport-bible</string>
 
-    <!-- channel names label-->
+    <!-- currentChannel names label-->
     <string name="channel_label_bbc_sports">BBC Sport</string>
     <string name="channel_label_bleacher_report">Bleacher Report</string>
     <string name="channel_label_espn">ESPN</string>
@@ -66,8 +66,8 @@
     <string name="pref_header_general">General</string>
 
     <!--Todo add all news channels in settings list -->
-    <string name="pref_title_add_friends_to_messages">Select favourite channel</string>
-    <string name="key_fav_channel">select fav channel</string>
+    <string name="pref_title_add_friends_to_messages">Select favourite currentChannel</string>
+    <string name="key_fav_channel">select fav currentChannel</string>
     <string name="action_sync">Sync data</string>
     <string-array name="pref_example_list_titles">
         <item>BBC Sport</item>
@@ -83,5 +83,7 @@
     <string-array name="multi_select_list_preference_default_value" />
     <string name="appwidget_text">Latest News</string>
     <string name="add_widget">Add widget</string>
+    <string name="ad_unit_id">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="ad_unit">ca-app-pub-3940256099942544~3347511713</string>
 
 </resources>

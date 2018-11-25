@@ -93,9 +93,9 @@ public class AppNetworkSource {
                 if (response.isSuccessful()) {
                     // posting value to the live data
                     mDownloadedNewsArticles.postValue(response.body().getArticles());
-                    for (int i = 0; i < response.body().getArticles().size(); i++) {
-                        Timber.d(i + " " + response.body().getArticles().get(i).getTitle());
-                    }
+//                    for (int i = 0; i < response.body().getArticles().size(); i++) {
+//                        Timber.d(i + " " + response.body().getArticles().get(i).getTitle());
+//                    }
                     isLoading.postValue(false);
                 }
             }

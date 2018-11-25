@@ -14,7 +14,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -41,7 +40,7 @@ import timber.log.Timber;
 //Todo favourite activity, detail fragment bug fix for tablet
 //Todo widget bug fix for tablets
 //Todo landscape automatically returns to shared-pref channel instead of current channel
-//Todo Add admob
+//Todo Add ad-mob
 //Todo add dynamic link
 //Todo open link on button click article
 
@@ -54,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
     @BindView(R.id.main_activity_toolbar)
     Toolbar toolbar;
     private InterstitialAd interstitialAd;
-    private FragmentManager manager;
+    private FragmentManager fragmentTransactionManager;
     private boolean isTwoPane;
     private SharedViewModel viewModel;
     private int orientation;
@@ -66,33 +65,39 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
 
         // set layout
         setContentView(R.layout.activity_main);
-
+        // butterknife binding
         ButterKnife.bind(this);
         toolbar.setTitle(getString(R.string.app_name));
-        orientation = getResources().getConfiguration().orientation;
         setSupportActionBar(toolbar);
+        orientation = getResources().getConfiguration().orientation;
         isTwoPane = getResources().getBoolean(R.bool.isTablet);
-        manager = getSupportFragmentManager();
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawerLayout, toolbar,
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
+        fragmentTransactionManager = getSupportFragmentManager();
+        initDrawerToggle();
         // init view-model & observe any data
-        observeViewModel();
+        initViewModel();
         // set fav channel as home
-        //viewModel.setChannel(viewModel.getFavouriteChannel());
-        setUpUIForDifferentScreenSize();
+        //setUpUIForDifferentScreenSize();
         // set up drawer content
         setUpDrawerContent();
         // init mob id
         initAddMob();
     }
 
+    private void initDrawerToggle() {
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawerLayout, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+    }
+
+    /**
+     * init ad-mob
+     */
     private void initAddMob() {
-        MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
+        MobileAds.initialize(this, getString(R.string.ad_unit));
         interstitialAd = new InterstitialAd(this);
-        interstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        interstitialAd.setAdUnitId(getString(R.string.ad_unit_id));
         ar = new AdRequest
                 .Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
@@ -100,8 +105,11 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
     }
 
     // observing view model
-    private void observeViewModel() {
-        viewModel = ViewModelProviders.of(this).get(SharedViewModel.class);
+    private void initViewModel() {
+        if(viewModel == null) {
+            viewModel = ViewModelProviders.of(this).get(SharedViewModel.class);
+            setUpUIForDifferentScreenSize();
+        }
     }
 
     /**
@@ -109,13 +117,12 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
      */
     private void setUpUIForDifferentScreenSize() {
         if (isTwoPane && (orientation != Configuration.ORIENTATION_LANDSCAPE)) {
-            Timber.d("tablet screen");
             setNewListFragment();
-            viewModel.startFetchingData(viewModel.getDefaultOrFavChannel());
+            //Todo solve here, instead of doing one extra network transaction
             viewModel.getNewsNetworkLiveData().observe(this, new Observer<List<Article>>() {
                 @Override
                 public void onChanged(@Nullable List<Article> articles) {
-                    manager.beginTransaction().replace(R.id.news_article_detail_container,
+                    fragmentTransactionManager.beginTransaction().replace(R.id.news_article_detail_container,
                             ArticleDetailFragment.newInstance(articles.get(0)),
                             getString(R.string.tag_detail_fragment)).commit();
                 }
@@ -195,16 +202,19 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
     /**
      * @param channel : selected channel name
      */
+    //Todo check for tabs later
     private void replaceWithNavItemFragment(String channel) {
         if(isTwoPane && (orientation != Configuration.ORIENTATION_LANDSCAPE)) {
             viewModel.setChannel(channel);
         } else {
-            ArticleListFragment fragment =
-                    (ArticleListFragment) getSupportFragmentManager()
-                            .findFragmentByTag(getString(R.string.tag_article_list_fragment));
-            if (fragment != null) {
-                fragment.changeMenuItemUpdateNewsList(channel);
-            }
+//            ArticleListFragment fragment =
+//                    (ArticleListFragment) getSupportFragmentManager()
+//                            .findFragmentByTag(getString(R.string.tag_article_list_fragment));
+//            if (fragment != null) {
+//                fragment.changeMenuItemUpdateNewsList(channel);
+//            }
+            Timber.d(channel);
+            viewModel.setCurrentChannel(channel);
         }
     }
 
@@ -212,8 +222,9 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
      * set list of news in list-fragment
      */
     private void setNewListFragment() {
-        ArticleListFragment listFragment = ArticleListFragment.newInstance(viewModel.getFavouriteChannel());
-        manager.beginTransaction().replace(R.id.news_article_list_container,
+        Timber.d("replacing with new article-fragment");
+        ArticleListFragment listFragment = new ArticleListFragment();
+        fragmentTransactionManager.beginTransaction().replace(R.id.news_article_list_container,
                 listFragment, getString(R.string.tag_article_list_fragment))
                 .commit();
     }

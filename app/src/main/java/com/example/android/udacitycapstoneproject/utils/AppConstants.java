@@ -23,4 +23,7 @@ public final class AppConstants {
     public static final int PENDING_INTENT_REQUEST_CODE = 400;
 
     public static final String LABEL_NEWS = "Latest News";
+
+    public static final String CURRENT_CHANNEL_KEY = "CURRENT-CHANNEL-KEY";
+    public static final String LATEST_TOP_THREE_NEWS_KEY = "LATEST_TOP_THREE_NEWS_KEY";
 }
