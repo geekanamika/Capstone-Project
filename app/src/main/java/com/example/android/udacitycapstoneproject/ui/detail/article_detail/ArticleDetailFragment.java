@@ -3,9 +3,12 @@ package com.example.android.udacitycapstoneproject.ui.detail.article_detail;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ShareCompat;
 import android.text.TextUtils;
@@ -14,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.udacitycapstoneproject.R;
 import com.example.android.udacitycapstoneproject.data.local.model.Article;
@@ -155,6 +159,14 @@ public class ArticleDetailFragment extends Fragment {
     @OnClick(R.id.btn_open_article)
     public void openButtonListener() {
         Timber.d("open button");
+        String url = articleData.getUrl();
+        if(!TextUtils.isEmpty(url)) {
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            startActivity(i);
+        } else {
+            Toast.makeText(getContext(), "Sorry, full article doesn't exist", Toast.LENGTH_SHORT).show();
+        }
 
     }
 
