@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
         // init view-model & observe any data
         observeViewModel();
         // set fav channel as home
-        viewModel.setChannel(viewModel.getFavouriteChannel());
+        //viewModel.setChannel(viewModel.getFavouriteChannel());
         setUpUIForDifferentScreenSize();
         // set up drawer content
         setUpDrawerContent();
@@ -213,7 +213,6 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
      */
     private void setNewListFragment() {
         ArticleListFragment listFragment = ArticleListFragment.newInstance(viewModel.getFavouriteChannel());
-
         manager.beginTransaction().replace(R.id.news_article_list_container,
                 listFragment, getString(R.string.tag_article_list_fragment))
                 .commit();

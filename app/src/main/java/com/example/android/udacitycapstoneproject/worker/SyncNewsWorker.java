@@ -45,8 +45,9 @@ public class SyncNewsWorker extends Worker {
 
         Retrofit retrofit = AppNetworkSource.getInstance().getRetrofit();
         WebService webService = retrofit.create(WebService.class);
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String channel = preferences.getString("select fav channel", "bbc-sport");
+        String channel;
+        AppNewsRepository newsRepository = InjectorUtil.provideRepository(MyApp.getInstance());
+        channel = newsRepository.getDefaultOrFavChannel();
         Timber.d(channel);
         Call<NewsResponse> newsResponseCall = webService.loadTopHeadlines(channel, BuildConfig.NewsApiKey);
         try {
@@ -55,8 +56,6 @@ public class SyncNewsWorker extends Worker {
                 NewsResponse data = myNewsResponse.body();
                 String latestTopThreeNews = getTopThreeLatestNews(data.getArticles());
                 Timber.d("setting the latest news in prefences \n "  + latestTopThreeNews);
-//                AppNewsRepository repository = InjectorUtil.provideRepository(MyApp.getInstance());
-//                repository.setTopThreeLatestNews(latestTopThreeNews);
                 updateWidgetMethod(latestTopThreeNews);
             } else {
                 return Result.RETRY;

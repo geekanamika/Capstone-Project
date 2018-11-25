@@ -2,6 +2,7 @@ package com.example.android.udacitycapstoneproject.data.prefs;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 /**
  * Created by Anamika Tripathi on 12/11/18.
@@ -9,18 +10,20 @@ import android.content.SharedPreferences;
 public class AppPrefHelper implements IPrefHelper{
 
     private final SharedPreferences sharedPreferences;
-    private final String DEFAULT_CHANNEL_KEY = "DEFAULT-CHANNEL-KEY";
+    private final SharedPreferences prefs;
+    private final String DEFAULT_CHANNEL_KEY = "select fav channel";
     private final String CURRENT_CHANNEL_KEY = "CURRENT-CHANNEL-KEY";
     public static final String LATEST_TOP_THREE_NEWS_KEY = "LATEST_TOP_THREE_NEWS_KEY";
 
 
     public AppPrefHelper(Context context, String prefFileName) {
         sharedPreferences = context.getSharedPreferences(prefFileName, Context.MODE_PRIVATE);
+        prefs = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     @Override
     public String getDefaultOrFavChannel() {
-        return sharedPreferences.getString(DEFAULT_CHANNEL_KEY, "bbc-sport");
+        return prefs.getString(DEFAULT_CHANNEL_KEY, "bbc-sport");
     }
 
     @Override

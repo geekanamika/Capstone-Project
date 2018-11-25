@@ -14,6 +14,8 @@ import com.example.android.udacitycapstoneproject.utils.InjectorUtil;
 
 import java.util.List;
 
+import timber.log.Timber;
+
 
 /**
  * Created by Anamika Tripathi on 13/11/18.
@@ -24,15 +26,15 @@ public class SharedViewModel extends AndroidViewModel {
     private LiveData<List<Article>> newsNetworkLiveData;
     private final MutableLiveData<String> channel;
     private final MutableLiveData<Article> articleMutableLiveData;
-    private SharedPreferences sharedPreferences;
 
     public SharedViewModel(@NonNull Application application) {
         super(application);
         repository = InjectorUtil.provideRepository(application.getApplicationContext());
         newsNetworkLiveData = repository.getTopNewsHeadlines();
         channel = new MutableLiveData<>();
+        setChannel(getFavouriteChannel());
         articleMutableLiveData = new MutableLiveData<>();
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application.getApplicationContext());
+
     }
 
     public LiveData<Article> getArticleMutableLiveData() {
@@ -57,6 +59,7 @@ public class SharedViewModel extends AndroidViewModel {
 
     void setChannel(String channel) {
         this.channel.postValue(channel);
+        Timber.d("channel in view-model is " + channel);
     }
 
     String getDefaultOrFavChannel() {
@@ -80,7 +83,7 @@ public class SharedViewModel extends AndroidViewModel {
     }
 
     public String getFavouriteChannel() {
-        return sharedPreferences.getString("select fav channel", "bbc-sport");
+        return repository.getDefaultOrFavChannel();
     }
 
     public String getTopThreeNews() {

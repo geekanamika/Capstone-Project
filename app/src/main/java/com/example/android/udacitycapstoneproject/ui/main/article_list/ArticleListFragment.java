@@ -20,6 +20,8 @@ import com.example.android.udacitycapstoneproject.ui.main.SharedViewModel;
 
 import java.util.List;
 
+import timber.log.Timber;
+
 // Todo before fetching data, check internet connectivity
 public class ArticleListFragment extends Fragment implements ArticleAdapter.ArticleOnClickListener{
 
@@ -119,7 +121,6 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Arti
             }
         } else {
             articleListViewModel = ViewModelProviders.of(this).get(ArticleListViewModel.class);
-            articleListViewModel.setChannel(channel);
             articleListViewModel.getNewsNetworkLiveData().observe(this, new Observer<List<Article>>() {
                 @Override
                 public void onChanged(@Nullable List<Article> articles) {
