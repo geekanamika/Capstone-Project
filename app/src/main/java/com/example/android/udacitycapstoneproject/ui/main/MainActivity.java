@@ -1,12 +1,10 @@
 package com.example.android.udacitycapstoneproject.ui.main;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
@@ -32,19 +30,9 @@ import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
-
-//Todo landscape bug fixes when nav item selected, it crashes
-//Todo favourite activity, detail fragment bug fix for tablet
-//Todo widget bug fix for tablets
-//Todo landscape automatically returns to shared-pref channel instead of current channel
-//Todo Add ad-mob
-//Todo add dynamic link
-//Todo open link on button click article
 
 public class MainActivity extends AppCompatActivity implements ArticleListFragment.OnArticleListListener {
 
@@ -129,14 +117,7 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
      * check if it's tablet or mobile phone, set layout accordingly
      */
     private void setUpUIForDifferentScreenSize() {
-        if (isTwoPane && (orientation != Configuration.ORIENTATION_LANDSCAPE)) {
-            setNewListFragment();
-            fragmentTransactionManager.beginTransaction().replace(R.id.news_article_detail_container,
-                    new ArticleDetailFragment(),
-                    getString(R.string.tag_detail_fragment)).commit();
-        } else {
-            setNewListFragment();
-        }
+        setNewListFragment();
     }
 
     /**
@@ -279,8 +260,13 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
      * @param article : open new activity if mobile device
      */
     @Override
-    public void setArticleSelectedInDetailScreen(Article article) {
+    public void setArticleSelectedInDetailScreen(Article article, boolean flag) {
         if(isTwoPane && (orientation != Configuration.ORIENTATION_LANDSCAPE)) {
+            if(flag){
+                fragmentTransactionManager.beginTransaction().replace(R.id.news_article_detail_container,
+                        ArticleDetailFragment.newInstance(article),
+                        getString(R.string.tag_detail_fragment)).commit();
+            }
             viewModel.setArticleMutableLiveData(article);
         }
         else {

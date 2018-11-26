@@ -124,7 +124,7 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Arti
                         if (articles != null) {
                             adapter.setList(articles);
                         }
-                        sharedViewModel.setArticleMutableLiveData(articles.get(0));
+                        mListener.setArticleSelectedInDetailScreen(articles.get(0), true);
                     }
                 });
                 sharedViewModel.getChannel().observe(this, new Observer<String>() {
@@ -194,7 +194,7 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Arti
     @Override
 
     public void onArticleClick(Article article) {
-        mListener.setArticleSelectedInDetailScreen(article);
+        mListener.setArticleSelectedInDetailScreen(article, false);
     }
 
     //Todo shift shared preference access to view-model later
@@ -211,6 +211,6 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Arti
      * interface implemented by main-activity to open detail activity
      */
     public interface OnArticleListListener {
-        void setArticleSelectedInDetailScreen(Article article);
+        void setArticleSelectedInDetailScreen(Article article, boolean flagForNewFragment);
     }
 }

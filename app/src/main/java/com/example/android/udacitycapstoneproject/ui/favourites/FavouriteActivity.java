@@ -49,8 +49,13 @@ public class FavouriteActivity extends AppCompatActivity implements FavouriteLis
      * @param article : open new activity if mobile device
      */
     @Override
-    public void setArticleSelectedInDetailScreen(Article article) {
+    public void setArticleSelectedInDetailScreen(Article article, boolean flag) {
         if(isTwoPane && (orientation != Configuration.ORIENTATION_LANDSCAPE)) {
+            if(flag){
+                getSupportFragmentManager().beginTransaction().replace(R.id.news_article_detail_container,
+                        ArticleDetailFragment.newInstance(article),
+                        getString(R.string.tag_detail_fragment)).commit();
+            }
             sharedViewModel.setArticleMutableLiveData(article);
         }
         else {
@@ -64,22 +69,7 @@ public class FavouriteActivity extends AppCompatActivity implements FavouriteLis
      * check if it's tablet or mobile phone, set layout accordingly
      */
     private void setUpUIForDifferentScreenSize() {
-        if (isTwoPane && (orientation != Configuration.ORIENTATION_LANDSCAPE)) {
-            Timber.d("tablet screen");
-            setNewListFragment();
-            sharedViewModel.getFirstFavArticle().observe(this,
-                    new Observer<Article>() {
-                @Override
-                public void onChanged(@Nullable Article article) {
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.news_article_detail_container,
-                                    ArticleDetailFragment.newInstance(article)
-                            , getString(R.string.tag_fav_fragment_detail)).commit();
-                }
-            });
-        } else {
-            setNewListFragment();
-        }
+        setNewListFragment();
     }
 
     private void setNewListFragment() {

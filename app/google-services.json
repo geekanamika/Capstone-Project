@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1023701884481",
+    "firebase_url": "https://sportify-7f4e9.firebaseio.com",
+    "project_id": "sportify-7f4e9",
+    "storage_bucket": "sportify-7f4e9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1023701884481:android:c0173d3311001928",
+        "android_client_info": {
+          "package_name": "com.example.android.udacitycapstoneproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1023701884481-ipk6v1pomh05emo45ng30dsosl76ucij.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCor_C2Peeo_74hwa0Mi13gJKJkvTwYe24"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

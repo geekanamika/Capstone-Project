@@ -86,6 +86,7 @@ public class FavouriteListFragment extends Fragment implements ArticleAdapter.Ar
             public void onChanged(@Nullable List<Article> articles) {
                 if (articles != null) {
                     adapter.setList(articles);
+                    mListener.setArticleSelectedInDetailScreen(articles.get(0), true);
                 }
             }
         });
@@ -93,13 +94,13 @@ public class FavouriteListFragment extends Fragment implements ArticleAdapter.Ar
 
     @Override
     public void onArticleClick(Article article) {
-        mListener.setArticleSelectedInDetailScreen(article);
+        mListener.setArticleSelectedInDetailScreen(article, false);
     }
 
     /**
-     * interface implemented by main-activity to open detail activity
+     * interface implemented by fav-activity to open detail activity
      */
     public interface OnArticleListListener {
-        void setArticleSelectedInDetailScreen(Article article);
+        void setArticleSelectedInDetailScreen(Article article, boolean flag);
     }
 }

@@ -30,9 +30,8 @@ public class SharedViewModel extends AndroidViewModel {
         repository = InjectorUtil.provideRepository(application.getApplicationContext());
         newsNetworkLiveData = repository.getTopNewsHeadlines();
         channel = new MutableLiveData<>();
-        //setChannel(getFavouriteChannel());
         articleMutableLiveData = new MutableLiveData<>();
-
+        channel.postValue(repository.getCurrentChannel());
     }
 
     public LiveData<Article> getArticleMutableLiveData() {
