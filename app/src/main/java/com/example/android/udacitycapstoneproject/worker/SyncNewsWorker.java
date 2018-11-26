@@ -56,7 +56,6 @@ public class SyncNewsWorker extends Worker {
                 NewsResponse data = myNewsResponse.body();
                 String latestTopThreeNews = getTopThreeLatestNews(data.getArticles());
                 newsRepository.setTopThreeLatestNews(latestTopThreeNews);
-                Timber.d("setting the latest news in prefences \n "  + latestTopThreeNews);
                 updateWidgetMethod(latestTopThreeNews);
             } else {
                 return Result.RETRY;

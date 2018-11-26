@@ -71,7 +71,9 @@ public class ArticleDetailFragment extends Fragment {
             articleData = getArguments().getParcelable(AppConstants.KEY_BUNDLE_PARCELLABLE);
         }
         context = getContext();
-        isTwoPane = context.getResources().getBoolean(R.bool.isTablet);
+        if (context != null) {
+            isTwoPane = context.getResources().getBoolean(R.bool.isTablet);
+        }
         return inflater.inflate(R.layout.article_detail_fragment, container, false);
     }
 
@@ -95,7 +97,6 @@ public class ArticleDetailFragment extends Fragment {
             public void onChanged(@Nullable Integer flag) {
                 if (flag != null) {
                     if(flag>0) {
-                        Timber.d("is favourite val "+ flag);
                         likeButton.setLiked(true);
                     } else {
                         likeButton.setLiked(false);
@@ -165,7 +166,7 @@ public class ArticleDetailFragment extends Fragment {
             i.setData(Uri.parse(url));
             startActivity(i);
         } else {
-            Toast.makeText(getContext(), "Sorry, full article doesn't exist", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getString(R.string.link_does_not_exist), Toast.LENGTH_SHORT).show();
         }
 
     }

@@ -202,7 +202,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
             periodicWorkRequest =
                     new PeriodicWorkRequest.Builder(SyncNewsWorker.class,
-                            2, TimeUnit.SECONDS)
+                            6, TimeUnit.HOURS)
                             .addTag(TAG_PERIODIC_WORK_REQUEST)
                             .build();
 

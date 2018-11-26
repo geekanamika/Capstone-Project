@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 28
@@ -19,9 +20,24 @@ android {
     }
     buildTypes.each {
         it.buildConfigField 'String', 'NewsApiKey', NEWS_API_KEY
+        it.buildConfigField 'String', 'AdAppId', Ad_app_Id
+        it.buildConfigField 'String', 'AdInterestialUnitIt', Ad_unit_id
     }
     compileOptions.incremental = false
 }
+
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        def requested = details.requested
+        if (requested.group == 'com.android.support') {
+            if (!requested.name.startsWith("multidex")) {
+                details.useVersion '28.0.0'
+            }
+        }
+
+    }
+}
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -48,9 +64,6 @@ dependencies {
     annotationProcessor "android.arch.persistence.room:compiler:$roomVersion"
     // WorkManager for background service
     implementation "android.arch.work:work-runtime:$rootProject.ext.workVersion"
-//    // optional - Firebase JobDispatcher support
-//    implementation "android.arch.work:work-firebase:$rootProject.ext.workVersion"
-
     // picasso
     implementation "com.squareup.picasso:picasso:$rootProject.ext.picassoVersion"
     // butterknife
@@ -61,7 +74,9 @@ dependencies {
     // like button
     implementation 'com.github.jd-alexander:LikeButton:0.2.3'
     // google ads
-    implementation 'com.google.android.gms:play-services-ads:17.0.0'
+    implementation 'com.google.android.gms:play-services-ads:17.1.0'
+    // analytics
+    implementation 'com.google.firebase:firebase-core:16.0.4'
     // junit
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:rules:1.0.2'

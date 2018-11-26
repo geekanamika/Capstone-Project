@@ -17,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.android.udacitycapstoneproject.BuildConfig;
 import com.example.android.udacitycapstoneproject.R;
 import com.example.android.udacitycapstoneproject.data.local.model.Article;
 import com.example.android.udacitycapstoneproject.ui.detail.DetailActivity;
@@ -29,6 +30,7 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.List;
 
@@ -58,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
     private SharedViewModel viewModel;
     private int orientation;
     private AdRequest ar;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +75,8 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
         orientation = getResources().getConfiguration().orientation;
         isTwoPane = getResources().getBoolean(R.bool.isTablet);
         fragmentTransactionManager = getSupportFragmentManager();
+        // Obtain the Firebase-Analytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         initDrawerToggle();
         // init view-model & observe any data
         initViewModel();
@@ -95,9 +100,9 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
      * init ad-mob
      */
     private void initAddMob() {
-        MobileAds.initialize(this, getString(R.string.ad_unit));
+        MobileAds.initialize(this, BuildConfig.AdAppId);
         interstitialAd = new InterstitialAd(this);
-        interstitialAd.setAdUnitId(getString(R.string.ad_unit_id));
+        interstitialAd.setAdUnitId(BuildConfig.AdInterestialUnitIt);
         ar = new AdRequest
                 .Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
@@ -110,6 +115,14 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
             viewModel = ViewModelProviders.of(this).get(SharedViewModel.class);
             setUpUIForDifferentScreenSize();
         }
+    }
+
+    private void logEventForAnalytics(String id, String name){
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, id);
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "NAV_BAR");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
 
     /**
@@ -130,7 +143,6 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
      * on click listener for drawer, set checked menu, close drawer & set-drawaer menu item
      */
     private void setUpDrawerContent() {
-
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -198,6 +210,7 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
      */
     //Todo check for tabs later
     private void replaceWithNavItemFragment(String channel) {
+        logEventForAnalytics(channel, channel);
         if(isTwoPane && (orientation != Configuration.ORIENTATION_LANDSCAPE)) {
             viewModel.setChannel(channel);
         } else {
