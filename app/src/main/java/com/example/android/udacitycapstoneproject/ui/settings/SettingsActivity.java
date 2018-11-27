@@ -20,7 +20,6 @@ import com.example.android.udacitycapstoneproject.sync.NewsSyncUtils;
 
 import java.util.List;
 
-import androidx.work.PeriodicWorkRequest;
 import timber.log.Timber;
 
 public class SettingsActivity extends AppCompatPreferenceActivity {
@@ -133,7 +132,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class GeneralPreferenceFragment extends PreferenceFragment {
 
-        private PeriodicWorkRequest periodicWorkRequest;
         private SharedPreferences prefs;
         private SharedPreferences.OnSharedPreferenceChangeListener listener;
 

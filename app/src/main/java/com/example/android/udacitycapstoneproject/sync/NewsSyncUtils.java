@@ -22,6 +22,7 @@ import timber.log.Timber;
 public class NewsSyncUtils {
 
     private static final int SYNC_INTERVAL_HOURS = 1;
+    //Todo change it to TimeUnit.HOURS later
     private static final int SYNC_INTERVAL_SECONDS = (int) TimeUnit.MINUTES.toSeconds(SYNC_INTERVAL_HOURS);
     private static final int SYNC_FLEXTIME_SECONDS = SYNC_INTERVAL_SECONDS / 3;
 

@@ -4,10 +4,10 @@ apply plugin: 'com.google.gms.google-services'
 android {
     signingConfigs {
         config {
-            keyAlias 'mykey'
-            keyPassword 'anamikapassword'
-            storeFile file('/home/anamika/android-studio/jre/bin/my-release-key.jks')
-            storePassword 'anamikapassword'
+            keyAlias 'my-alias'
+            keyPassword 'anamika'
+            storeFile file('/home/anamika/AndroidStudioProjects/udacity projects/Nanodegree Projects/Capstone Project/my-release-key.jks')
+            storePassword 'anamika'
         }
     }
     compileSdkVersion 28
