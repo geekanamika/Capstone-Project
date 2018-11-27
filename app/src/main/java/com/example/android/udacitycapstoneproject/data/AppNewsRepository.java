@@ -119,4 +119,14 @@ public class AppNewsRepository implements INewsRepository {
     public SharedPreferences getMySharedPrefences() {
         return prefHelper.getMySharedPrefences();
     }
+
+    @Override
+    public boolean isFirstRun() {
+        return prefHelper.isFirstRun();
+    }
+
+    @Override
+    public void setFirstRun() {
+        prefHelper.setFirstRun();
+    }
 }

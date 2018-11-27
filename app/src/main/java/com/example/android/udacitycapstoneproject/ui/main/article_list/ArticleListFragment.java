@@ -20,6 +20,7 @@ import com.example.android.udacitycapstoneproject.R;
 import com.example.android.udacitycapstoneproject.data.local.model.Article;
 import com.example.android.udacitycapstoneproject.ui.main.SharedViewModel;
 import com.example.android.udacitycapstoneproject.utils.AppConstants;
+import com.example.android.udacitycapstoneproject.sync.NewsSyncUtils;
 
 import java.util.List;
 
@@ -38,6 +39,7 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Arti
     private SwipeRefreshLayout swipeRefreshLayout;
     private boolean isTwoPane;
     private int orientation;
+    private boolean isFirstRun;
 
 //    public static ArticleListFragment newInstance(String name){
 //        Bundle bundle = new Bundle();
@@ -82,6 +84,7 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Arti
         super.onViewCreated(view, savedInstanceState);
         //ButterKnife.bind(this, view);
         initViews(view);
+
         
         // init recycler view
         initRecyclerView();
@@ -117,6 +120,11 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Arti
         if(isTwoPane && (orientation != Configuration.ORIENTATION_LANDSCAPE)) {
             if (getActivity() != null) {
                 sharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
+                isFirstRun = articleListViewModel.isFirstRun();
+                if(isFirstRun) {
+                    articleListViewModel.setFirstRun();
+                    NewsSyncUtils.scheduleFirebaseJobDispatcherSync(getActivity());
+                }
                 sharedViewModel.getNewsNetworkLiveData().observe(this, new Observer<List<Article>>() {
                     @Override
                     public void onChanged(@Nullable List<Article> articles) {
@@ -136,6 +144,11 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Arti
                 });
             }
         } else {
+            isFirstRun = articleListViewModel.isFirstRun();
+            if(isFirstRun) {
+                articleListViewModel.setFirstRun();
+                NewsSyncUtils.scheduleFirebaseJobDispatcherSync(getActivity());
+            }
             articleListViewModel.getCurrentChannel().observe(this, new Observer<String>() {
                 @Override
                 public void onChanged(@Nullable String newChannel) {
@@ -151,6 +164,7 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Arti
                     if (articles != null) {
                         adapter.setList(articles);
                     }
+
                 }
             });
         }

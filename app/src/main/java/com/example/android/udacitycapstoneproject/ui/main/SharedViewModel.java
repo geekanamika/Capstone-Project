@@ -86,4 +86,12 @@ public class SharedViewModel extends AndroidViewModel {
     public void setCurrentChannel(String channel) {
         repository.setCurrentChannel(channel);
     }
+
+    public boolean isFirstRun() {
+        return repository.isFirstRun();
+    }
+
+    public void setFirstRun() {
+        repository.setFirstRun();
+    }
 }

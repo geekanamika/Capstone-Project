@@ -12,6 +12,7 @@ public class AppPrefHelper implements IPrefHelper{
     private final SharedPreferences sharedPreferences;
     private final SharedPreferences prefs;
     private final String DEFAULT_CHANNEL_KEY = "select fav channel";
+    private final String IS_FIRST_RUN_KEY = "is first run";
     private final String CURRENT_CHANNEL_KEY = "CURRENT-CHANNEL-KEY";
     public static final String LATEST_TOP_THREE_NEWS_KEY = "LATEST_TOP_THREE_NEWS_KEY";
 
@@ -23,6 +24,16 @@ public class AppPrefHelper implements IPrefHelper{
 
     public SharedPreferences getMySharedPrefences() {
         return sharedPreferences;
+    }
+
+    @Override
+    public boolean isFirstRun() {
+        return prefs.getBoolean(IS_FIRST_RUN_KEY, true);
+    }
+
+    @Override
+    public void setFirstRun() {
+        prefs.edit().putBoolean(IS_FIRST_RUN_KEY, false).apply();
     }
 
     @Override

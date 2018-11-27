@@ -13,12 +13,10 @@ import com.example.android.udacitycapstoneproject.utils.InjectorUtil;
 
 import java.util.List;
 
-import timber.log.Timber;
-
 /**
  * Created by Anamika Tripathi on 13/11/18.
  */
-class ArticleListViewModel extends AndroidViewModel {
+public class ArticleListViewModel extends AndroidViewModel {
 
     private LiveData<List<Article>> newsNetworkLiveData;
     private AppNewsRepository repository;
@@ -58,5 +56,13 @@ class ArticleListViewModel extends AndroidViewModel {
 
     public SharedPreferences getSharedPreferences(){
         return repository.getMySharedPrefences();
+    }
+
+    public boolean isFirstRun() {
+        return repository.isFirstRun();
+    }
+
+    public void setFirstRun() {
+        repository.setFirstRun();
     }
 }

@@ -13,4 +13,6 @@ public interface IPrefHelper {
     String getTopThreeLatestNews();
     void setTopThreeLatestNews(String threeLatestNews);
     SharedPreferences getMySharedPrefences();
+    boolean isFirstRun();
+    void setFirstRun();
 }

@@ -4,7 +4,7 @@ import android.arch.lifecycle.ViewModel;
 
 import com.example.android.udacitycapstoneproject.data.local.model.Article;
 
-class ArticleDetailViewModel extends ViewModel {
+public class ArticleDetailViewModel extends ViewModel {
     private Article article;
 
     public Article getArticle() {

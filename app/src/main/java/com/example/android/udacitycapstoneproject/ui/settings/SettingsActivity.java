@@ -16,17 +16,12 @@ import android.view.MenuItem;
 
 import com.example.android.udacitycapstoneproject.MyApp;
 import com.example.android.udacitycapstoneproject.R;
-import com.example.android.udacitycapstoneproject.worker.SyncNewsWorker;
+import com.example.android.udacitycapstoneproject.sync.NewsSyncUtils;
 
 import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkManager;
 import timber.log.Timber;
-
-import static com.example.android.udacitycapstoneproject.utils.AppConstants.TAG_PERIODIC_WORK_REQUEST;
 
 public class SettingsActivity extends AppCompatPreferenceActivity {
 
@@ -173,15 +168,13 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
          */
         private void registerNewsFavChangeListener() {
             prefs = PreferenceManager.getDefaultSharedPreferences(MyApp.getInstance());
+
             listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
                 @Override
                 public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
                     if(key.equals(getString(R.string.key_fav_channel))) {
-                        if (periodicWorkRequest != null) {
-                            UUID compressionWorkId = periodicWorkRequest.getId();
-                            WorkManager.getInstance().cancelWorkById(compressionWorkId);
-                        }
-                        startWorkManager();
+                        Timber.d("fav news channel changed");
+                        NewsSyncUtils.scheduleFirebaseJobDispatcherSync(getActivity());
                     }
                 }
             };
@@ -194,22 +187,22 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             prefs.unregisterOnSharedPreferenceChangeListener(listener);
         }
 
-        /**
-         * starts work manager using periodic work request
-         */
-        private void startWorkManager() {
-            final WorkManager workManager = WorkManager.getInstance();
-
-            periodicWorkRequest =
-                    new PeriodicWorkRequest.Builder(SyncNewsWorker.class,
-                            6, TimeUnit.HOURS)
-                            .addTag(TAG_PERIODIC_WORK_REQUEST)
-                            .build();
-
-            // Queue the work
-            Timber.d("work manager enqueue");
-            workManager.enqueue(periodicWorkRequest);
-        }
+//        /**
+//         * starts work manager using periodic work request
+//         */
+//        private void startWorkManager() {
+//            final WorkManager workManager = WorkManager.getInstance();
+//
+//            periodicWorkRequest =
+//                    new PeriodicWorkRequest.Builder(SyncNewsWorker.class,
+//                            6, TimeUnit.HOURS)
+//                            .addTag(TAG_PERIODIC_WORK_REQUEST)
+//                            .build();
+//
+//            // Queue the work
+//            Timber.d("work manager enqueue");
+//            workManager.enqueue(periodicWorkRequest);
+//        }
 
     }
 
