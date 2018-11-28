@@ -223,9 +223,10 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
         if(isTwoPane && (orientation != Configuration.ORIENTATION_LANDSCAPE)) {
             listFragment = new ArticleListFragment();
         } else {
-            Timber.d("curr channel is " + currChannel);
+            Timber.d("curr channel is %s" , currChannel);
             if(currChannel.equals("")) {
-                listFragment = ArticleListFragment.newInstance(viewModel.getDefaultOrFavChannel());
+                currChannel = viewModel.getDefaultOrFavChannel();
+                listFragment = ArticleListFragment.newInstance(currChannel);
                 Timber.d("sending channel via arguments");
             }
             else{

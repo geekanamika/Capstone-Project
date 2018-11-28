@@ -56,7 +56,7 @@ public class SharedViewModel extends AndroidViewModel {
 
     void setChannel(String channel) {
         this.channel.postValue(channel);
-        Timber.d("channel in view-model is " + channel);
+        Timber.d("channel in view-model is %s" , channel);
     }
 
     String getDefaultOrFavChannel() {

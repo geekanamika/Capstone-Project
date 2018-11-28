@@ -88,9 +88,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
                     android:layout_marginEnd="16dp"
-                    android:layout_marginRight="16dp"
                     android:contentDescription="@string/share"
                     android:src="@drawable/ic_share"
 
@@ -101,9 +99,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_marginEnd="16dp"
-                    android:layout_marginRight="16dp"
                     android:layout_toStartOf="@id/share_button"
-                    android:layout_toLeftOf="@id/share_button"
                     android:contentDescription="@string/favorite"
                     app:icon_size="24dp"
                     app:icon_type="heart" />

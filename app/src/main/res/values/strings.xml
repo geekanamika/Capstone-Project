@@ -38,15 +38,11 @@
 
     <string name="powered_by">News API</string>
     <string name="news_source">Sports News Source</string>
-    <string name="label_dash">- </string>
-    <string name="sample_subtitle">BBC News</string>
     <string name="thumbnail_article_image">A thumbnail image provided with news article</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="tag_article_list_fragment">list fragment</string>
-    <string name="key_parcellable_article">key_parcellable_article</string>
-    <string name="detail_error_message">Something Unexpted Occured!</string>
+    <string name="detail_error_message">Something Unexpted Occurred!</string>
     <string name="detail_fragment">detail-fragment</string>
     <string name="article_image">article image</string>
     <string name="overview">Overview</string>
@@ -57,7 +53,6 @@
     <string name="tag_detail_fragment">detail fragment</string>
     <string name="mark_as_favourite">Mark as Favourite</string>
     <string name="tag_fav_list_fragment">favourite list fragment</string>
-    <string name="tag_fav_fragment_detail">fav detail fragment</string>
     <string name="title_activity_settings">Settings</string>
 
     <!-- Strings related to Settings -->
@@ -68,7 +63,6 @@
     <!--Todo add all news channels in settings list -->
     <string name="pref_title_add_friends_to_messages">Select favourite currentChannel</string>
     <string name="key_fav_channel">select fav channel</string>
-    <string name="action_sync">Sync data</string>
     <string-array name="pref_example_list_titles">
         <item>BBC Sport</item>
         <item>Bleacher Report</item>
@@ -80,11 +74,7 @@
         <item>espn</item>
     </string-array>
 
-    <string-array name="multi_select_list_preference_default_value" />
     <string name="appwidget_text">Latest News</string>
-    <string name="add_widget">Add widget</string>
-    <string name="ad_unit_id">ca-app-pub-3940256099942544/1033173712</string>
-    <string name="ad_unit">ca-app-pub-3940256099942544~3347511713</string>
     <string name="link_does_not_exist">Sorry, full article doesn\'t exist</string>
 
 </resources>

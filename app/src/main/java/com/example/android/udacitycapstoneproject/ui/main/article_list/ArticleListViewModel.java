@@ -42,7 +42,7 @@ public class ArticleListViewModel extends AndroidViewModel {
     }
 
     void startFetchingData(String source) {
-        Timber.d("starting fetching data " + source);
+        Timber.d("starting fetching data %s" , source);
         repository.startFetchingData(source);
     }
 
