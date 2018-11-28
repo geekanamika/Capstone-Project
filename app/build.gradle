@@ -6,7 +6,7 @@ android {
         config {
             keyAlias 'my-alias'
             keyPassword 'anamika'
-            storeFile file('/home/anamika/AndroidStudioProjects/udacity projects/Nanodegree Projects/Capstone Project/my-release-key.jks')
+            storeFile file("$rootDir/my-release-key.jks")
             storePassword 'anamika'
         }
     }

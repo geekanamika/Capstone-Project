@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
     private SharedViewModel viewModel;
     private int orientation;
     private AdRequest ar;
+    private String currChannel = "";
     private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
@@ -58,6 +59,9 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
         setContentView(R.layout.activity_main);
         // butterknife binding
         ButterKnife.bind(this);
+        if (savedInstanceState != null) {
+            currChannel = savedInstanceState.getString("channel_name");
+        }
         toolbar.setTitle(getString(R.string.app_name));
         setSupportActionBar(toolbar);
         orientation = getResources().getConfiguration().orientation;
@@ -66,14 +70,18 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
         // Obtain the Firebase-Analytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         initDrawerToggle();
-        // init view-model & observe any data
-        initViewModel();
-        // set fav channel as home
-        //setUpUIForDifferentScreenSize();
         // set up drawer content
         setUpDrawerContent();
+        // init view-model & observe any data
+        initViewModel();
         // init mob id
         initAddMob();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("channel_name", currChannel);
     }
 
     private void initDrawerToggle() {
@@ -101,7 +109,8 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
     private void initViewModel() {
         if(viewModel == null) {
             viewModel = ViewModelProviders.of(this).get(SharedViewModel.class);
-            setUpUIForDifferentScreenSize();
+            //setUpUIForDifferentScreenSize();
+            setNewListFragment();
         }
     }
 
@@ -182,28 +191,49 @@ public class MainActivity extends AppCompatActivity implements ArticleListFragme
                 replaceWithNavItemFragment(getString(R.string.channel_source_the_sport_bible));
                 break;
             default:
-                Timber.e("unknown menu item");
+                replaceWithNavItemFragment(viewModel.getDefaultOrFavChannel());
         }
     }
 
     /**
      * @param channel : selected channel name
      */
-    //Todo check for tabs later
     private void replaceWithNavItemFragment(String channel) {
+        this.currChannel = channel;
         logEventForAnalytics(channel, channel);
         if(isTwoPane && (orientation != Configuration.ORIENTATION_LANDSCAPE)) {
             viewModel.setChannel(channel);
         } else {
-            viewModel.setCurrentChannel(channel);
+            ArticleListFragment fragment =
+                    (ArticleListFragment) getSupportFragmentManager()
+                            .findFragmentByTag(getString(R.string.tag_article_list_fragment));
+            if (fragment != null) {
+                //setUpToolBar(channel);
+                fragment.changeMenuItemUpdateNewsList(channel);
+            }
         }
     }
+
 
     /**
      * set list of news in list-fragment
      */
     private void setNewListFragment() {
-        ArticleListFragment listFragment = new ArticleListFragment();
+        ArticleListFragment listFragment;
+        if(isTwoPane && (orientation != Configuration.ORIENTATION_LANDSCAPE)) {
+            listFragment = new ArticleListFragment();
+        } else {
+            Timber.d("curr channel is " + currChannel);
+            if(currChannel.equals("")) {
+                listFragment = ArticleListFragment.newInstance(viewModel.getDefaultOrFavChannel());
+                Timber.d("sending channel via arguments");
+            }
+            else{
+                listFragment = new ArticleListFragment();
+                Timber.d("not sending any arguments");
+            }
+
+        }
         fragmentTransactionManager.beginTransaction().replace(R.id.news_article_list_container,
                 listFragment, getString(R.string.tag_article_list_fragment))
                 .commit();

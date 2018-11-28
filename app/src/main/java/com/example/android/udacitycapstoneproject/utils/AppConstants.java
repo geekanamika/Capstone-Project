@@ -26,4 +26,5 @@ public final class AppConstants {
 
     public static final String CURRENT_CHANNEL_KEY = "CURRENT-CHANNEL-KEY";
     public static final String LATEST_TOP_THREE_NEWS_KEY = "LATEST_TOP_THREE_NEWS_KEY";
+    public static final String BUNDLE_RECYCLER_LAYOUT = "classname.recycler.layout";
 }

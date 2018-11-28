@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -26,12 +27,12 @@ import java.util.List;
 
 import timber.log.Timber;
 
-// Todo before fetching data, check internet connectivity
-public class ArticleListFragment extends Fragment implements ArticleAdapter.ArticleOnClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
+import static com.example.android.udacitycapstoneproject.utils.AppConstants.BUNDLE_RECYCLER_LAYOUT;
+
+public class ArticleListFragment extends Fragment implements ArticleAdapter.ArticleOnClickListener {
 
     private OnArticleListListener mListener;
     RecyclerView newListView;
-    private String channel;
     private Context context;
     private ArticleAdapter adapter;
     private SharedViewModel sharedViewModel;
@@ -40,14 +41,16 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Arti
     private boolean isTwoPane;
     private int orientation;
     private boolean isFirstRun;
+    private LinearLayoutManager layoutManager;
 
-//    public static ArticleListFragment newInstance(String name){
-//        Bundle bundle = new Bundle();
-//        bundle.putString("channel_name", name);
-//        ArticleListFragment listFragment = new ArticleListFragment();
-//        listFragment.setArguments(bundle);
-//        return listFragment;
-//    }
+    public static ArticleListFragment newInstance(String name){
+        Bundle bundle = new Bundle();
+        bundle.putString("channel_name", name);
+        ArticleListFragment listFragment = new ArticleListFragment();
+        listFragment.setArguments(bundle);
+        return listFragment;
+    }
+
 
     public ArticleListFragment() {
         // Required empty public constructor
@@ -68,21 +71,8 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Arti
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        articleListViewModel.getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        articleListViewModel.getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
-    }
-
-    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //ButterKnife.bind(this, view);
         initViews(view);
 
         
@@ -92,6 +82,10 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Arti
         viewModelSetUp();
         // swipe to refresh layout listener
         swipeLayoutListener(view);
+        if (getArguments() != null) {
+            String channel = getArguments().getString("channel_name");
+            changeMenuItemUpdateNewsList(channel);
+        }
         
     }
 
@@ -109,8 +103,25 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Arti
         adapter = new ArticleAdapter(context, ArticleListFragment.this);
         newListView.setAdapter(adapter);
 
-        LinearLayoutManager manager = new LinearLayoutManager(context);
-        newListView.setLayoutManager(manager);
+        layoutManager = new LinearLayoutManager(context);
+        newListView.setLayoutManager(layoutManager);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(BUNDLE_RECYCLER_LAYOUT,
+                newListView.getLayoutManager().onSaveInstanceState());
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            Parcelable savedRecyclerLayoutState = savedInstanceState.getParcelable(BUNDLE_RECYCLER_LAYOUT);
+            newListView.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
+        }
+
     }
 
     /**
@@ -149,14 +160,6 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Arti
                 articleListViewModel.setFirstRun();
                 NewsSyncUtils.scheduleFirebaseJobDispatcherSync(getActivity());
             }
-            articleListViewModel.getCurrentChannel().observe(this, new Observer<String>() {
-                @Override
-                public void onChanged(@Nullable String newChannel) {
-                    Timber.d("current channel changed to: " + newChannel);
-                    articleListViewModel.startFetchingData(newChannel);
-                    swipeRefreshLayout.setRefreshing(true);
-                }
-            });
             articleListViewModel.getNewsNetworkLiveData().observe(this, new Observer<List<Article>>() {
                 @Override
                 public void onChanged(@Nullable List<Article> articles) {
@@ -181,7 +184,7 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Arti
                 if(isTwoPane && (orientation != Configuration.ORIENTATION_LANDSCAPE)){
                     sharedViewModel.startFetchingData(sharedViewModel.getChannel().getValue());
                 } else {
-                    articleListViewModel.startFetchingData(articleListViewModel.getChannelFromRepo());
+                    articleListViewModel.startFetchingData(articleListViewModel.getCurrentChannel());
                 }
 
             }
@@ -211,20 +214,15 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Arti
         mListener.setArticleSelectedInDetailScreen(article, false);
     }
 
-    //Todo shift shared preference access to view-model later
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if(key.equals(AppConstants.CURRENT_CHANNEL_KEY)) {
-            channel = sharedPreferences.getString(AppConstants.CURRENT_CHANNEL_KEY,"");
-            articleListViewModel.setCurrentChannel(channel);
-            Timber.d("channel changed in nav bar " + channel);
-        }
-    }
-
     /**
      * interface implemented by main-activity to open detail activity
      */
     public interface OnArticleListListener {
         void setArticleSelectedInDetailScreen(Article article, boolean flagForNewFragment);
+    }
+
+    public void changeMenuItemUpdateNewsList(String channel){
+        swipeRefreshLayout.setRefreshing(true);
+        articleListViewModel.setChannel(channel);
     }
 }

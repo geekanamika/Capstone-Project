@@ -13,6 +13,8 @@ import com.example.android.udacitycapstoneproject.utils.InjectorUtil;
 
 import java.util.List;
 
+import timber.log.Timber;
+
 /**
  * Created by Anamika Tripathi on 13/11/18.
  */
@@ -20,18 +22,27 @@ public class ArticleListViewModel extends AndroidViewModel {
 
     private LiveData<List<Article>> newsNetworkLiveData;
     private AppNewsRepository repository;
-    private final MutableLiveData<String> currentChannel;
+    private String currentChannel;
 
     public ArticleListViewModel(@NonNull Application application) {
         super(application);
 
         repository = InjectorUtil.provideRepository(application.getApplicationContext());
         newsNetworkLiveData = repository.getTopNewsHeadlines();
-        currentChannel = new MutableLiveData<>();
-        setCurrentChannel(getChannelFromRepo());
+
+    }
+
+    public void setChannel(String channel) {
+        currentChannel = channel;
+        startFetchingData(channel);
+    }
+
+    public String getCurrentChannel() {
+        return currentChannel;
     }
 
     void startFetchingData(String source) {
+        Timber.d("starting fetching data " + source);
         repository.startFetchingData(source);
     }
 
@@ -39,13 +50,14 @@ public class ArticleListViewModel extends AndroidViewModel {
         return newsNetworkLiveData;
     }
 
-    public LiveData<String> getCurrentChannel() {
-        return currentChannel;
-    }
+//    public LiveData<String> getCurrentChannel() {
+//        return currentChannel;
+//    }
+//
+//    public void setCurrentChannel(String channel) {
+//        this.currentChannel.postValue(channel);
+//    }
 
-    public void setCurrentChannel(String channel) {
-        this.currentChannel.postValue(channel);
-    }
     public String getFavouriteChannel() {
         return repository.getDefaultOrFavChannel();
     }
