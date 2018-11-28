@@ -3,7 +3,6 @@ package com.example.android.udacitycapstoneproject.ui.main.article_list;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -19,12 +18,14 @@ import android.view.ViewGroup;
 
 import com.example.android.udacitycapstoneproject.R;
 import com.example.android.udacitycapstoneproject.data.local.model.Article;
+import com.example.android.udacitycapstoneproject.sync.NewsSyncUtils;
 import com.example.android.udacitycapstoneproject.ui.main.SharedViewModel;
 import com.example.android.udacitycapstoneproject.utils.AppConstants;
-import com.example.android.udacitycapstoneproject.sync.NewsSyncUtils;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import timber.log.Timber;
 
 import static com.example.android.udacitycapstoneproject.utils.AppConstants.BUNDLE_RECYCLER_LAYOUT;
@@ -32,6 +33,7 @@ import static com.example.android.udacitycapstoneproject.utils.AppConstants.BUND
 public class ArticleListFragment extends Fragment implements ArticleAdapter.ArticleOnClickListener {
 
     private OnArticleListListener mListener;
+    @BindView(R.id.main_activity_recycler_view)
     RecyclerView newListView;
     private Context context;
     private ArticleAdapter adapter;
@@ -41,6 +43,7 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Arti
     private boolean isTwoPane;
     private int orientation;
     private boolean isFirstRun;
+    private Parcelable recyclerViewState;
     private LinearLayoutManager layoutManager;
 
     public static ArticleListFragment newInstance(String name){
@@ -65,7 +68,9 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Arti
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         articleListViewModel = ViewModelProviders.of(this).get(ArticleListViewModel.class);
-
+        if (savedInstanceState != null) {
+            recyclerViewState = savedInstanceState.getParcelable(AppConstants.KEY_RECYCLER_MAIN);
+        }
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_artcile_list, container, false);
     }
@@ -73,6 +78,7 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Arti
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ButterKnife.bind(this, view);
         initViews(view);
 
         
@@ -89,10 +95,17 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Arti
         
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (recyclerViewState != null) {
+            layoutManager.onRestoreInstanceState(recyclerViewState);
+        }
+    }
+
     private void initViews(View view) {
         context = getContext();
         isTwoPane = context.getResources().getBoolean(R.bool.isTablet);
-        newListView = view.findViewById(R.id.main_activity_recycler_view);
         orientation = getResources().getConfiguration().orientation;
     }
 
@@ -112,16 +125,6 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Arti
         super.onSaveInstanceState(outState);
         outState.putParcelable(BUNDLE_RECYCLER_LAYOUT,
                 newListView.getLayoutManager().onSaveInstanceState());
-    }
-
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-        if (savedInstanceState != null) {
-            Parcelable savedRecyclerLayoutState = savedInstanceState.getParcelable(BUNDLE_RECYCLER_LAYOUT);
-            newListView.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
-        }
-
     }
 
     /**
