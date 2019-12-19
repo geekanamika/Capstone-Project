@@ -1,0 +1,39 @@
+name: Debug Build (APK)
+
+on:
+  push:
+    branches:
+      - development
+  pull_request:
+    branches:
+      - development
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - name: Submodule checkout
+        run: |
+          git config --global url."https://api:${{ secrets.GITHUB_ACTIONS_TOKEN }}@github.com/".insteadOf "https://github.com/"
+          git config --global url."https://ssh:${{ secrets.GITHUB_ACTIONS_TOKEN }}@github.com/".insteadOf "ssh://git@github.com/"
+          git config --global url."https://git:${{ secrets.GITHUB_ACTIONS_TOKEN }}@github.com/".insteadOf "git@github.com:"
+          git submodule update --init --force --recursive
+      - name: set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Build with Gradle
+        if: success()
+        run: |
+          ./gradlew assembleDebug --stacktrace
+      - name: Upload APK
+        uses: actions/upload-artifact@development
+        if: success()
+        with:
+          name: capstone-debug.apk
+          path: app/build/outputs/apk/debug/capstone-debug.apk
